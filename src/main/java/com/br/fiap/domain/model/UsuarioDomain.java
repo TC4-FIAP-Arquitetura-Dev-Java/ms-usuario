@@ -6,6 +6,7 @@ public class UsuarioDomain {
 
     private String id;
     private String usuario;
+    private String password;
     private String nome;
     private String email;
     private Boolean usuarioAtivo;
@@ -14,9 +15,10 @@ public class UsuarioDomain {
 
     public UsuarioDomain(){}
 
-    public UsuarioDomain(String id, String usuario, String nome, String email, Boolean usuarioAtivo, OffsetDateTime dataCriacao, OffsetDateTime dataAlteracao) {
+    public UsuarioDomain(String id, String usuario, String password, String nome, String email, Boolean usuarioAtivo, OffsetDateTime dataCriacao, OffsetDateTime dataAlteracao) {
         this.id = id;
         this.usuario = usuario;
+        this.password = password;
         this.nome = nome;
         this.email = email;
         this.usuarioAtivo = usuarioAtivo;
@@ -38,6 +40,14 @@ public class UsuarioDomain {
 
     public void setUsuario(String usuario) {
         this.usuario = usuario;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getNome() {

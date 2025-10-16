@@ -19,8 +19,11 @@ public class UsuarioDocument {
     @Indexed(unique = true)
     private String usuario;
 
-    @Indexed(unique = true)
+    private String password;
+
     private String nome;
+
+    @Indexed(unique = true)
     private String email;
     private Boolean usuarioAtivo;
 

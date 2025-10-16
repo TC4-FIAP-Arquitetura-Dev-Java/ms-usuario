@@ -89,6 +89,32 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 
+  /usuarios/username:
+    get:
+      summary: Consultar usuário por usuario (sem paginação)
+      operationId: consultarUsuarioPorUsuario
+      tags:
+        - Usuarios
+      parameters:
+        - $ref: '#/components/parameters/ConsultaUsuario'
+      responses:
+        '200':
+          description: Usuário encontrado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
   /usuarios/{id}:
     put:
       summary: Atualizar usuário existente
@@ -164,6 +190,9 @@ components:
             id:
               type: string
               example: 652ff3a9b1c2d40012ab45de
+            password:
+              type: string
+              example: asdbfdvdf157211sdsds2D1FSD8FS1S5D1CS5d
             dataCriacao:
               type: string
               format: date-time

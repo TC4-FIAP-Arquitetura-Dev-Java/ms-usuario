@@ -17,6 +17,8 @@ public interface UsuarioDtoMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "dataCriacao", ignore = true)
     @Mapping(target = "dataAlteracao", ignore = true)
+    @Mapping(target = "password", ignore = true)
+
     UsuarioDomain toUsuarioDomain(UsuarioRequestDto usuarioRequestDto);
 
     UsuarioResponseDto toUsuarioResponseDto(UsuarioDomain usuarioDomain);
