@@ -6,7 +6,7 @@ public interface UsuarioDomainService {
 
     UsuarioDomain buscarUsuarioPorId(String id);
 
-    UsuarioDomain buscarUsuarioPorUsername(String id);
+    UsuarioDomain buscarPorUsuario(String id);
 
     void verificarExistenciaEmailouUsuario(String email, String usuario);
 }

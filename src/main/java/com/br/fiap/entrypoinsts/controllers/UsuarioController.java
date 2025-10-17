@@ -20,7 +20,7 @@ public class UsuarioController implements UsuariosApi {
 
     private final AtualizarUsuarioUseCase atualizarUsuarioUseCase;
     private final BuscarUsuariosPaginadoUseCase buscarUsuariosPaginadoUseCase;
-    private final ConsultarUsuarioPorUsernameUseCase consultarUsuarioPorUsernameUseCase;
+    private final ConsultarPorUsuarioUseCase consultarPorUsuarioUseCase;
     private final ConsultarUsuarioPorIdUseCase consultarUsuarioPorIdUseCase;
     private final CriarUsuarioUseCase criarUsuarioUseCase;
     private final ExcluirUsuarioUseCase excluirUsuarioUseCase;
@@ -28,13 +28,13 @@ public class UsuarioController implements UsuariosApi {
     public UsuarioController(AtualizarUsuarioUseCase atualizarUsuarioUseCase,
                              BuscarUsuariosPaginadoUseCase buscarUsuariosPaginadoUseCase,
                              ConsultarUsuarioPorIdUseCase consultarUsuarioPorIdUseCase,
-                             ConsultarUsuarioPorUsernameUseCase consultarUsuarioPorUsernameUseCase,
+                             ConsultarPorUsuarioUseCase consultarPorUsuarioUseCase,
                              CriarUsuarioUseCase criarUsuarioUseCase,
                              ExcluirUsuarioUseCase excluirUsuarioUseCase) {
         this.atualizarUsuarioUseCase = atualizarUsuarioUseCase;
         this.buscarUsuariosPaginadoUseCase = buscarUsuariosPaginadoUseCase;
         this.consultarUsuarioPorIdUseCase = consultarUsuarioPorIdUseCase;
-        this.consultarUsuarioPorUsernameUseCase = consultarUsuarioPorUsernameUseCase;
+        this.consultarPorUsuarioUseCase = consultarPorUsuarioUseCase;
         this.criarUsuarioUseCase = criarUsuarioUseCase;
         this.excluirUsuarioUseCase = excluirUsuarioUseCase;
     }
@@ -46,10 +46,17 @@ public class UsuarioController implements UsuariosApi {
         return ResponseEntity.noContent().build();
     }
 
-
     @Override
-    public ResponseEntity<BuscarUsuariosPaginadoDto> _buscarUsuariosPaginado(String id, String usuario, Boolean usuarioAtivo, Integer page, Integer size, String sort) {
+    public ResponseEntity<BuscarUsuariosPaginadoDto> _buscarUsuariosPaginado(String usuario, Boolean usuarioAtivo, Integer page, Integer size, String sort) {
         return ResponseEntity.ok(null);
+    }
+
+//    TODO: CORRIGIR O ENDPOINT DE CONSULTA POR USERNAME PARA NÃO TER CONFLITO
+    @Override
+    public ResponseEntity<UsuarioResponseDto> _consultarPorUsuario(String usuario) {
+        UsuarioDomain usuarioDomain = consultarPorUsuarioUseCase.buscarPorUsuario(usuario);
+        UsuarioResponseDto usuarioResponseDto = UsuarioPresenter.toUsuarioRequestDto(usuarioDomain);
+        return ResponseEntity.ok(usuarioResponseDto);
     }
 
     @Override
@@ -60,14 +67,8 @@ public class UsuarioController implements UsuariosApi {
     }
 
     @Override
-    public ResponseEntity<UsuarioResponseDto> _consultarUsuarioPorUsuario(String username) {
-        UsuarioDomain usuarioDomain = consultarUsuarioPorUsernameUseCase.buscarUsuarioPorUsername(username);
-        UsuarioResponseDto usuarioResponseDto = UsuarioPresenter.toUsuarioRequestDto(usuarioDomain);
-        return ResponseEntity.ok(usuarioResponseDto);
-    }
-
-    @Override
     public ResponseEntity<Void> _criarUsuario(UsuarioRequestDto usuarioRequestDto) {
+        //TODO: AO CRIAR UM USUARIO ESSE MS DEVE CRIPTOGRAFAR A SENHA (PASSWORD)
         UsuarioDomain usuarioDomain = UsuarioPresenter.toUsuarioDomain(usuarioRequestDto);
         criarUsuarioUseCase.criar(usuarioDomain);
         return ResponseEntity.status(HttpStatus.CREATED).build();

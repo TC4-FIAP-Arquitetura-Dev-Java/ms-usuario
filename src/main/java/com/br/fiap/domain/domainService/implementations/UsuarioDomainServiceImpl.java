@@ -22,8 +22,8 @@ public class UsuarioDomainServiceImpl implements UsuarioDomainService {
     }
 
     @Override
-    public UsuarioDomain buscarUsuarioPorUsername(String username) {
-        return usuarioGateway.buscarUsuarioPorUsername(username).orElseThrow(
+    public UsuarioDomain buscarPorUsuario(String usuario) {
+        return usuarioGateway.buscarPorUsuario(usuario).orElseThrow(
                 () -> new ObjetoNaoExisteException("O usuário informado não está cadastrado.")
         );
     }
