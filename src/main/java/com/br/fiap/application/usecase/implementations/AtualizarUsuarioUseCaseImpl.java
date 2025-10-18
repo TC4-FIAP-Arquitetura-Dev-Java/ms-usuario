@@ -30,7 +30,7 @@ public class AtualizarUsuarioUseCaseImpl implements AtualizarUsuarioUseCase {
         domain.setEmail(usuarioDomain.getEmail());
         domain.setNome(usuarioDomain.getNome());
         domain.setUsuarioAtivo(usuarioDomain.getUsuarioAtivo());
-        domain.setUsuario(usuarioDomain.getUsuario());
+        domain.setUsuario(usuarioDomain.getUsuario().toLowerCase());
         domain.setPassword(secretKeyGenerator.encode(usuarioDomain.getPassword()));
 
         usuarioGateway.salvar(domain);

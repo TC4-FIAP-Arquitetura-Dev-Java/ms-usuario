@@ -26,6 +26,7 @@ public class CriarUsuarioUseCaseImpl implements CriarUsuarioUseCase {
     public void criar(UsuarioDomain usuarioDomain) {
         validarCamposObrigatorios(usuarioDomain);
         usuarioDomainService.verificarExistenciaEmailouUsuario(usuarioDomain.getEmail(), usuarioDomain.getUsuario());
+        usuarioDomain.setUsuario(usuarioDomain.getUsuario().toLowerCase());
         usuarioDomain.setPassword(secretKeyGenerator.encode(usuarioDomain.getPassword()));
         usuarioGateway.salvar(usuarioDomain);
     }
