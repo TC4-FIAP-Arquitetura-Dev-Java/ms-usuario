@@ -10,14 +10,14 @@ tags:
 
 paths:
 
-  /usuarios/username:
+  /usuarios/getUser/{username}:
     get:
       summary: Consultar por usuario
       operationId: consultarPorUsuario
       tags:
         - Usuarios
       parameters:
-        - $ref: '#/components/parameters/ConsultaUsuario'
+        - $ref: '#/components/parameters/GetUsername'
       responses:
         '200':
           description: Usuário encontrado com sucesso.
@@ -269,6 +269,14 @@ components:
       schema:
         type: boolean
       description: Indica se o usuário está ativo.
+
+    GetUsername:
+      name: username
+      in: path
+      required: true
+      schema:
+        type: string
+      description: username usuário.
 
     PathId:
       name: id

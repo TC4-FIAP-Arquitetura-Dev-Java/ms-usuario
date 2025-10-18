@@ -51,7 +51,6 @@ public class UsuarioController implements UsuariosApi {
         return ResponseEntity.ok(null);
     }
 
-//    TODO: CORRIGIR O ENDPOINT DE CONSULTA POR USERNAME PARA NÃO TER CONFLITO
     @Override
     public ResponseEntity<UsuarioResponseDto> _consultarPorUsuario(String usuario) {
         UsuarioDomain usuarioDomain = consultarPorUsuarioUseCase.buscarPorUsuario(usuario);
@@ -68,7 +67,6 @@ public class UsuarioController implements UsuariosApi {
 
     @Override
     public ResponseEntity<Void> _criarUsuario(UsuarioRequestDto usuarioRequestDto) {
-        //TODO: AO CRIAR UM USUARIO ESSE MS DEVE CRIPTOGRAFAR A SENHA (PASSWORD)
         UsuarioDomain usuarioDomain = UsuarioPresenter.toUsuarioDomain(usuarioRequestDto);
         criarUsuarioUseCase.criar(usuarioDomain);
         return ResponseEntity.status(HttpStatus.CREATED).build();

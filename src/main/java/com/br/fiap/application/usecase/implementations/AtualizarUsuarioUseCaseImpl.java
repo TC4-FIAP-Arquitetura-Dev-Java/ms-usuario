@@ -1,5 +1,6 @@
 package com.br.fiap.application.usecase.implementations;
 
+import com.br.fiap.application.gateways.SecretKeyGenerator;
 import com.br.fiap.application.gateways.UsuarioGateway;
 import com.br.fiap.application.usecase.AtualizarUsuarioUseCase;
 import com.br.fiap.domain.domainService.UsuarioDomainService;
@@ -9,11 +10,14 @@ import static com.br.fiap.domain.rules.ValidarCamposObrigatoriosRule.validarCamp
 
 public class AtualizarUsuarioUseCaseImpl implements AtualizarUsuarioUseCase {
 
+    private final SecretKeyGenerator secretKeyGenerator;
     private final UsuarioDomainService usuarioDomainService;
     private final UsuarioGateway usuarioGateway;
 
-    public AtualizarUsuarioUseCaseImpl(UsuarioDomainService usuarioDomainService,
+    public AtualizarUsuarioUseCaseImpl(SecretKeyGenerator secretKeyGenerator,
+                                       UsuarioDomainService usuarioDomainService,
                                        UsuarioGateway usuarioGateway) {
+        this.secretKeyGenerator = secretKeyGenerator;
         this.usuarioDomainService = usuarioDomainService;
         this.usuarioGateway = usuarioGateway;
     }
@@ -27,6 +31,7 @@ public class AtualizarUsuarioUseCaseImpl implements AtualizarUsuarioUseCase {
         domain.setNome(usuarioDomain.getNome());
         domain.setUsuarioAtivo(usuarioDomain.getUsuarioAtivo());
         domain.setUsuario(usuarioDomain.getUsuario());
+        domain.setPassword(secretKeyGenerator.encode(usuarioDomain.getPassword()));
 
         usuarioGateway.salvar(domain);
     }
