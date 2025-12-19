@@ -1,10 +1,6 @@
 package com.br.fiap.entrypoinsts.controllers;
 
-import com.br.fiap.application.usecase.AtualizarUsuarioUseCase;
-import com.br.fiap.application.usecase.BuscarUsuariosPaginadoUseCase;
-import com.br.fiap.application.usecase.ConsultarUsuarioPorIdUseCase;
-import com.br.fiap.application.usecase.CriarUsuarioUseCase;
-import com.br.fiap.application.usecase.ExcluirUsuarioUseCase;
+import com.br.fiap.application.usecase.*;
 import com.br.fiap.domain.model.UsuarioDomain;
 import com.br.fiap.entrypoinsts.controllers.presenter.UsuarioPresenter;
 import com.fiap.ms.usuarioDomain.UsuariosApi;
@@ -23,7 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsuarioController implements UsuariosApi {
 
     private final AtualizarUsuarioUseCase atualizarUsuarioUseCase;
-    private final BuscarUsuariosPaginadoUseCase buscarUsuariosPaginadoUseCase;
+//    private final BuscarUsuariosPaginadoUseCase buscarUsuariosPaginadoUseCase;
+    private final ConsultarPorUsuarioUseCase consultarPorUsuarioUseCase;
     private final ConsultarUsuarioPorIdUseCase consultarUsuarioPorIdUseCase;
     private final CriarUsuarioUseCase criarUsuarioUseCase;
     private final ExcluirUsuarioUseCase excluirUsuarioUseCase;
@@ -31,11 +28,13 @@ public class UsuarioController implements UsuariosApi {
     public UsuarioController(AtualizarUsuarioUseCase atualizarUsuarioUseCase,
                              BuscarUsuariosPaginadoUseCase buscarUsuariosPaginadoUseCase,
                              ConsultarUsuarioPorIdUseCase consultarUsuarioPorIdUseCase,
+                             ConsultarPorUsuarioUseCase consultarPorUsuarioUseCase,
                              CriarUsuarioUseCase criarUsuarioUseCase,
                              ExcluirUsuarioUseCase excluirUsuarioUseCase) {
         this.atualizarUsuarioUseCase = atualizarUsuarioUseCase;
-        this.buscarUsuariosPaginadoUseCase = buscarUsuariosPaginadoUseCase;
+//        this.buscarUsuariosPaginadoUseCase = buscarUsuariosPaginadoUseCase;
         this.consultarUsuarioPorIdUseCase = consultarUsuarioPorIdUseCase;
+        this.consultarPorUsuarioUseCase = consultarPorUsuarioUseCase;
         this.criarUsuarioUseCase = criarUsuarioUseCase;
         this.excluirUsuarioUseCase = excluirUsuarioUseCase;
     }
@@ -47,10 +46,16 @@ public class UsuarioController implements UsuariosApi {
         return ResponseEntity.noContent().build();
     }
 
+    @Override
+    public ResponseEntity<BuscarUsuariosPaginadoDto> _buscarUsuariosPaginado(String usuario, Boolean usuarioAtivo, Integer page, Integer size, String sort) {
+        return ResponseEntity.ok(null);
+    }
 
     @Override
-    public ResponseEntity<BuscarUsuariosPaginadoDto> _buscarUsuariosPaginado(String id, String usuario, Boolean usuarioAtivo, Integer page, Integer size, String sort) {
-        return ResponseEntity.ok(null);
+    public ResponseEntity<UsuarioResponseDto> _consultarPorUsuario(String usuario) {
+        UsuarioDomain usuarioDomain = consultarPorUsuarioUseCase.buscarPorUsuario(usuario);
+        UsuarioResponseDto usuarioResponseDto = UsuarioPresenter.toUsuarioRequestDto(usuarioDomain);
+        return ResponseEntity.ok(usuarioResponseDto);
     }
 
     @Override

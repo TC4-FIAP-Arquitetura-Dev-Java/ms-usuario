@@ -22,6 +22,13 @@ public class UsuarioDomainServiceImpl implements UsuarioDomainService {
     }
 
     @Override
+    public UsuarioDomain buscarPorUsuario(String usuario) {
+        return usuarioGateway.buscarPorUsuario(usuario).orElseThrow(
+                () -> new ObjetoNaoExisteException("O usuário informado não está cadastrado.")
+        );
+    }
+
+    @Override
     public void verificarExistenciaEmailouUsuario(String email, String usuario) {
         if(usuarioGateway.verificarExistenciaEmailouUsuario(email, usuario).isPresent()){
             throw new ObjetoJaExisteException("Usuário ou e-mail já cadastrados!");

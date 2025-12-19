@@ -1,5 +1,6 @@
 package com.br.fiap.application.usecase.implementations;
 
+import com.br.fiap.application.gateways.SecretKeyGenerator;
 import com.br.fiap.application.gateways.UsuarioGateway;
 import com.br.fiap.application.usecase.CriarUsuarioUseCase;
 import com.br.fiap.domain.domainService.UsuarioDomainService;
@@ -9,11 +10,14 @@ import static com.br.fiap.domain.rules.ValidarCamposObrigatoriosRule.validarCamp
 
 public class CriarUsuarioUseCaseImpl implements CriarUsuarioUseCase {
 
+    private final SecretKeyGenerator  secretKeyGenerator;
     private final UsuarioDomainService usuarioDomainService;
     private final UsuarioGateway usuarioGateway;
 
-    public CriarUsuarioUseCaseImpl(UsuarioDomainService usuarioDomainService,
-                                       UsuarioGateway usuarioGateway) {
+    public CriarUsuarioUseCaseImpl(SecretKeyGenerator secretKeyGenerator,
+                                   UsuarioDomainService usuarioDomainService,
+                                   UsuarioGateway usuarioGateway) {
+        this.secretKeyGenerator = secretKeyGenerator;
         this.usuarioDomainService = usuarioDomainService;
         this.usuarioGateway = usuarioGateway;
     }
@@ -22,7 +26,8 @@ public class CriarUsuarioUseCaseImpl implements CriarUsuarioUseCase {
     public void criar(UsuarioDomain usuarioDomain) {
         validarCamposObrigatorios(usuarioDomain);
         usuarioDomainService.verificarExistenciaEmailouUsuario(usuarioDomain.getEmail(), usuarioDomain.getUsuario());
-
+        usuarioDomain.setUsuario(usuarioDomain.getUsuario().toLowerCase());
+        usuarioDomain.setPassword(secretKeyGenerator.encode(usuarioDomain.getPassword()));
         usuarioGateway.salvar(usuarioDomain);
     }
 }

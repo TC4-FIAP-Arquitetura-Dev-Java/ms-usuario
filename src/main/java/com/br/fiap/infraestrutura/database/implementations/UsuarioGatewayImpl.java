@@ -23,6 +23,12 @@ public class UsuarioGatewayImpl implements UsuarioGateway {
     }
 
     @Override
+    public Optional<UsuarioDomain> buscarPorUsuario(String username) {
+        return usuarioRepository.findByUsuario(username)
+                .map(UsuarioDocumentMapper.INSTANCE::toDomain);
+    }
+
+    @Override
     public void salvar(UsuarioDomain domain) {
         UsuarioDocument usuarioDocument = UsuarioDocumentMapper.INSTANCE.toDocument(domain);
         usuarioRepository.save(usuarioDocument);

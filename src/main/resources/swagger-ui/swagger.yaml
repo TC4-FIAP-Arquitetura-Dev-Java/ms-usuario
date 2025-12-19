@@ -9,6 +9,33 @@ tags:
     description: Operações relacionadas a usuários.
 
 paths:
+
+  /usuarios/getUser/{username}:
+    get:
+      summary: Consultar por usuario
+      operationId: consultarPorUsuario
+      tags:
+        - Usuarios
+      parameters:
+        - $ref: '#/components/parameters/GetUsername'
+      responses:
+        '200':
+          description: Usuário encontrado com sucesso.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
   /usuarios:
     get:
       summary: Buscar e filtrar usuários (com paginação)
@@ -16,7 +43,6 @@ paths:
       tags:
         - Usuarios
       parameters:
-        - $ref: '#/components/parameters/ConsultaId'
         - $ref: '#/components/parameters/ConsultaUsuario'
         - $ref: '#/components/parameters/ConsultaUsuarioAtivo'
         - $ref: '#/components/parameters/Page'
@@ -63,14 +89,14 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 
-  /usuarios/consulta:
+  /usuarios/{id}:
     get:
       summary: Consultar usuário por ID (sem paginação)
       operationId: consultarUsuarioPorId
       tags:
         - Usuarios
       parameters:
-        - $ref: '#/components/parameters/ConsultaId'
+        - $ref: '#/components/parameters/PathId'
       responses:
         '200':
           description: Usuário encontrado com sucesso.
@@ -89,7 +115,6 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 
-  /usuarios/{id}:
     put:
       summary: Atualizar usuário existente
       operationId: atualizarUsuario
@@ -138,6 +163,7 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 
+
 components:
   schemas:
     UsuarioRequest:
@@ -149,6 +175,9 @@ components:
         nome:
           type: string
           example: João da Silva
+        password:
+          type: string
+          example: $enh@2025
         email:
           type: string
           example: joao.silva@email.com
@@ -164,6 +193,9 @@ components:
             id:
               type: string
               example: 652ff3a9b1c2d40012ab45de
+            password:
+              type: string
+              example: sdfsdfasdf45df4asd21sad5fas2d1fsdf54
             dataCriacao:
               type: string
               format: date-time
@@ -228,7 +260,7 @@ components:
       required: false
       schema:
         type: string
-      description: Nome de usuário.
+      description: Username usuario.
 
     ConsultaUsuarioAtivo:
       name: usuarioAtivo
@@ -237,6 +269,14 @@ components:
       schema:
         type: boolean
       description: Indica se o usuário está ativo.
+
+    GetUsername:
+      name: username
+      in: path
+      required: true
+      schema:
+        type: string
+      description: username usuário.
 
     PathId:
       name: id

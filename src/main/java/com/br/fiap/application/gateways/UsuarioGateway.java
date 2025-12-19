@@ -7,6 +7,8 @@ import java.util.Optional;
 public interface UsuarioGateway {
     Optional<UsuarioDomain> buscarUsuarioPorId(String id);
 
+    Optional<UsuarioDomain> buscarPorUsuario(String username);
+
     void salvar(UsuarioDomain domain);
 
     void deletar(UsuarioDomain domain);
