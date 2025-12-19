@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UsuarioController implements UsuariosApi {
 
     private final AtualizarUsuarioUseCase atualizarUsuarioUseCase;
-    private final BuscarUsuariosPaginadoUseCase buscarUsuariosPaginadoUseCase;
+//    private final BuscarUsuariosPaginadoUseCase buscarUsuariosPaginadoUseCase;
     private final ConsultarPorUsuarioUseCase consultarPorUsuarioUseCase;
     private final ConsultarUsuarioPorIdUseCase consultarUsuarioPorIdUseCase;
     private final CriarUsuarioUseCase criarUsuarioUseCase;
@@ -32,7 +32,7 @@ public class UsuarioController implements UsuariosApi {
                              CriarUsuarioUseCase criarUsuarioUseCase,
                              ExcluirUsuarioUseCase excluirUsuarioUseCase) {
         this.atualizarUsuarioUseCase = atualizarUsuarioUseCase;
-        this.buscarUsuariosPaginadoUseCase = buscarUsuariosPaginadoUseCase;
+//        this.buscarUsuariosPaginadoUseCase = buscarUsuariosPaginadoUseCase;
         this.consultarUsuarioPorIdUseCase = consultarUsuarioPorIdUseCase;
         this.consultarPorUsuarioUseCase = consultarPorUsuarioUseCase;
         this.criarUsuarioUseCase = criarUsuarioUseCase;

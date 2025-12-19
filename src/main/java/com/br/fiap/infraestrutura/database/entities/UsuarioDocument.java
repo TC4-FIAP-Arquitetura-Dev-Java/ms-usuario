@@ -16,15 +16,16 @@ public class UsuarioDocument {
     @Id
     private String id;
 
-    @Indexed(unique = true)
-    private String usuario;
+    private String nome;
 
     private String password;
 
-    private String nome;
+    @Indexed(unique = true)
+    private String usuario;
 
     @Indexed(unique = true)
     private String email;
+
     private Boolean usuarioAtivo;
 
     @CreatedDate
