@@ -1,14 +1,14 @@
 package com.br.fiap.util.mocks;
 
-import com.br.fiap.domain.model.UsuarioDomain;
+import com.br.fiap.domain.model.UserDomain;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
 public class UsuarioDomainMocks {
 
-    public static UsuarioDomain getUsuarioDomain() {
-        UsuarioDomain domain = new UsuarioDomain();
+    public static UserDomain getUsuarioDomain() {
+        UserDomain domain = new UserDomain();
         domain.setId("123");
         domain.setUsuario("marcos.silva");
         domain.setNome("Marcos Silva");

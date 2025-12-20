@@ -1,13 +1,13 @@
 package com.br.fiap.util.mocks;
 
-import com.br.fiap.infraestrutura.database.entities.UsuarioDocument;
+import com.br.fiap.infraestrutura.database.entities.UserDocument;
 
 import java.time.Instant;
 
 public class UsuarioDocumentMock {
 
-    public static UsuarioDocument getUsuarioDocument() {
-        UsuarioDocument document = new UsuarioDocument();
+    public static UserDocument getUsuarioDocument() {
+        UserDocument document = new UserDocument();
         document.setId("123");
         document.setUsuario("marcos.silva");
         document.setNome("Marcos Silva");

@@ -1,7 +1,7 @@
 package com.br.fiap.domain.rules;
 
-import com.br.fiap.domain.exception.CampoObrigatorioException;
-import com.br.fiap.domain.model.UsuarioDomain;
+import com.br.fiap.domain.exception.FieldRequiredException;
+import com.br.fiap.domain.model.UserDomain;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 
@@ -14,16 +14,16 @@ class ValidarCamposObrigatoriosRuleTest {
 
     @Test
     void deveValidarCamposObrigatoriosQuandoTodosPreenchidos() {
-        UsuarioDomain usuario = getUsuarioDomain();
+        UserDomain usuario = getUsuarioDomain();
         assertDoesNotThrow(() -> ValidarCamposObrigatoriosRule.validarCamposObrigatorios(usuario));
     }
 
     @Test
     void deveLancarExcecaoQuandoTodosCamposNulos() {
-        UsuarioDomain usuario = new UsuarioDomain();
+        UserDomain usuario = new UserDomain();
 
-        CampoObrigatorioException exception = assertThrows(
-                CampoObrigatorioException.class,
+        FieldRequiredException exception = assertThrows(
+                FieldRequiredException.class,
                 () -> ValidarCamposObrigatoriosRule.validarCamposObrigatorios(usuario)
         );
 
@@ -32,13 +32,13 @@ class ValidarCamposObrigatoriosRuleTest {
 
     @Test
     void deveLancarExcecaoQuandoTodosCamposVazios() {
-        UsuarioDomain usuario = new UsuarioDomain();
+        UserDomain usuario = new UserDomain();
         usuario.setUsuario(" ");
         usuario.setNome("");
         usuario.setEmail("  ");
 
-        CampoObrigatorioException exception = assertThrows(
-                CampoObrigatorioException.class,
+        FieldRequiredException exception = assertThrows(
+                FieldRequiredException.class,
                 () -> ValidarCamposObrigatoriosRule.validarCamposObrigatorios(usuario)
         );
 
@@ -47,7 +47,7 @@ class ValidarCamposObrigatoriosRuleTest {
 
     @Test
     void naoDeveLancarExcecaoQuandoUmCampoAusente() {
-        UsuarioDomain usuario = new UsuarioDomain();
+        UserDomain usuario = new UserDomain();
         usuario.setUsuario("marcos.silva");
         usuario.setNome("Marcos Silva");
         usuario.setEmail(null);

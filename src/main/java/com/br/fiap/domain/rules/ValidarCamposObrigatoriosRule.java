@@ -1,16 +1,16 @@
 package com.br.fiap.domain.rules;
 
-import com.br.fiap.domain.exception.CampoObrigatorioException;
-import com.br.fiap.domain.model.UsuarioDomain;
+import com.br.fiap.domain.exception.FieldRequiredException;
+import com.br.fiap.domain.model.UserDomain;
 
 public class ValidarCamposObrigatoriosRule {
 
-    public static void validarCamposObrigatorios(UsuarioDomain usuarioDomain) {
-        if (isNuloOuVazio(usuarioDomain.getUsuario()) &&
-                isNuloOuVazio(usuarioDomain.getNome()) &&
-                isNuloOuVazio(usuarioDomain.getPassword()) &&
-                isNuloOuVazio(usuarioDomain.getEmail())) {
-            throw new CampoObrigatorioException("Existem campos obrigatorios que não foram preenchidos");
+    public static void validarCamposObrigatorios(UserDomain userDomain) {
+        if (isNuloOuVazio(userDomain.getUsuario()) &&
+                isNuloOuVazio(userDomain.getNome()) &&
+                isNuloOuVazio(userDomain.getPassword()) &&
+                isNuloOuVazio(userDomain.getEmail())) {
+            throw new FieldRequiredException("Existem campos obrigatorios que não foram preenchidos");
         }
     }
 
