@@ -36,7 +36,7 @@ public class UserGatewayImpl implements UserGateway {
 
     @Override
     public Optional<UserDomain> getByUsername(String username) {
-        return userRepository.findByUsuario(username)
+        return userRepository.findByUsername(username)
                 .map(UserDocumentMapper.INSTANCE::toDomain);
     }
 
@@ -53,8 +53,8 @@ public class UserGatewayImpl implements UserGateway {
     }
 
     @Override
-    public Optional<UserDomain> checkExistenceByEmailOrUser(String email, String usuario) {
-        return userRepository.findByEmailOrUsuario(email, usuario)
+    public Optional<UserDomain> checkExistenceByEmailOrUser(String email, String username) {
+        return userRepository.findByEmailOrUsername(email, username)
                 .map(UserDocumentMapper.INSTANCE::toDomain);
     }
 
@@ -82,12 +82,12 @@ public class UserGatewayImpl implements UserGateway {
         }
 
         // Filter by email
-        if (filter.email() != null && filter.email().isBlank()) {
+        if (filter.email() != null && !filter.email().isBlank()) {
             query.addCriteria(Criteria.where("email").is(filter.email().trim()));
         }
 
         // Filter by username
-        if (filter.username() != null && filter.username().isBlank()) {
+        if (filter.username() != null && !filter.username().isBlank()) {
             query.addCriteria(Criteria.where("username").is(filter.username().trim()));
         }
 

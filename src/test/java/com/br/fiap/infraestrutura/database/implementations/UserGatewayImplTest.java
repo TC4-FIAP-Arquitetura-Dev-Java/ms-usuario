@@ -66,11 +66,11 @@ class UserGatewayImplTest {
     void verificarExistenciaEmailouUsuario_sucesso() {
         String email = "teste@teste.com";
         String usuario = "teste";
-        when(userRepository.findByEmailOrUsuario(email, usuario)).thenReturn(Optional.empty());
+        when(userRepository.findByEmailOrUsername(email, usuario)).thenReturn(Optional.empty());
 
         Optional<UserDomain> domain = usuarioGateway.checkExistenceByEmailOrUser(email, usuario);
 
         assertNotNull(domain);
-        verify(userRepository, times(1)).findByEmailOrUsuario(email, usuario);
+        verify(userRepository, times(1)).findByEmailOrUsername(email, usuario);
     }
 }
