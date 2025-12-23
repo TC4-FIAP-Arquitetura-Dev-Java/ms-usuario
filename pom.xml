@@ -10,9 +10,9 @@
 	</parent>
 
 	<groupId>com.br.fiap</groupId>
-	<artifactId>ms-usuarioGateway</artifactId>
+	<artifactId>ms-userGateway</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<name>ms-usuarioGateway</name>
+	<name>ms-userGateway</name>
 	<description>Projeto para gerenciamento de ações do usuário</description>
 
 	<properties>
@@ -204,7 +204,7 @@
 							<inputSpec>${project.basedir}/src/main/resources/swagger-ui/swagger.yaml</inputSpec>
 							<generatorName>spring</generatorName>
 							<output>${project.build.directory}/generated-sources/swagger</output>
-							<apiPackage>com.fiap.ms.usuarioDomain</apiPackage>
+							<apiPackage>com.fiap.ms.userDomain</apiPackage>
 							<generateApiTests>false</generateApiTests>
 							<generateModelTests>false</generateModelTests>
 							<modelNameSuffix>Dto</modelNameSuffix>
@@ -213,9 +213,9 @@
 								<interfaceOnly>true</interfaceOnly>
 								<useTags>true</useTags>
 								<dateLibrary>java8</dateLibrary>
-								<basePackage>com.fiap.ms.usuarioDomain.gen</basePackage>
-								<modelPackage>com.fiap.ms.usuarioDomain.gen.model</modelPackage>
-								<configPackage>com.fiap.ms.usuarioDomain.gen.config</configPackage>
+								<basePackage>com.fiap.ms.userDomain.gen</basePackage>
+								<modelPackage>com.fiap.ms.userDomain.gen.model</modelPackage>
+								<configPackage>com.fiap.ms.userDomain.gen.config</configPackage>
 								<delegatePattern>true</delegatePattern>
 								<skipDefaultInterface>true</skipDefaultInterface>
 							</configOptions>
@@ -244,7 +244,7 @@
 				</executions>
 				<configuration>
 					<excludes>
-						<exclude>**/usuarioDomain/**</exclude>
+						<exclude>**/userDomain/**</exclude>
 						<exclude>**/MsUsuarioApplication.class/**</exclude>
 						<exclude>**/config/usecase/**</exclude>
 					</excludes>

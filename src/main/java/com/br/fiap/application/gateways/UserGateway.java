@@ -1,0 +1,23 @@
+package com.br.fiap.application.gateways;
+
+import com.br.fiap.application.dto.UserFilter;
+import com.br.fiap.domain.model.UserDomain;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Optional;
+
+public interface UserGateway {
+
+    Optional<UserDomain> getById(String id);
+
+    Optional<UserDomain> getByUsername(String username);
+
+    Page<UserDomain> findWithFilter(UserFilter filter, Pageable pageable);
+
+    void save(UserDomain domain);
+
+    void delete(UserDomain domain);
+
+    Optional<UserDomain> checkExistenceByEmailOrUser(String email, String user);
+}

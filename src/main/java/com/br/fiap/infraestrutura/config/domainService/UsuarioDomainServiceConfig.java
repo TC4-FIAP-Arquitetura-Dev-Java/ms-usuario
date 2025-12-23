@@ -1,7 +1,7 @@
 package com.br.fiap.infraestrutura.config.domainService;
 
-import com.br.fiap.application.gateways.UsuarioGateway;
-import com.br.fiap.domain.domainService.implementations.UsuarioDomainServiceImpl;
+import com.br.fiap.application.gateways.UserGateway;
+import com.br.fiap.domain.domainService.implementations.UserDomainServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class UsuarioDomainServiceConfig {
 
     @Bean
-    public UsuarioDomainServiceImpl usuarioDomainService(UsuarioGateway usuarioGateway) {
-        return new UsuarioDomainServiceImpl(usuarioGateway);
+    public UserDomainServiceImpl usuarioDomainService(UserGateway userGateway) {
+        return new UserDomainServiceImpl(userGateway);
     }
 }

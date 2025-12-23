@@ -1,15 +1,15 @@
 package com.br.fiap.util.mocks;
 
-import com.fiap.ms.usuarioDomain.gen.model.UsuarioRequestDto;
+import com.fiap.ms.userDomain.gen.model.UserRequestDto;
 
 public class UsuarioRequestDtoMock {
 
-    public static UsuarioRequestDto getUsuarioRequestDto() {
-        UsuarioRequestDto request = new UsuarioRequestDto();
-        request.setUsuario("marcos.silva");
-        request.setNome("Marcos Silva");
+    public static UserRequestDto getUserRequestDto() {
+        UserRequestDto request = new UserRequestDto();
+        request.setUsername("marcos.silva");
+        request.setName("Marcos Silva");
         request.setEmail("marcos.silva@email.com");
-        request.setUsuarioAtivo(true);
+        request.setActiveUser(true);
         return request;
     }
 }

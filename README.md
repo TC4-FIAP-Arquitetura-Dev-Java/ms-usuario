@@ -1,29 +1,31 @@
 # 👤 MS Usuário
 
-Microserviço responsável pelo **cadastro, consulta, atualização e remoção de usuários** do sistema. A API segue o padrão **REST**, está documentada com **OpenAPI 3.0 (Swagger)** e utiliza **MongoDB** como banco de dados.
+Microserviço responsável pelo **gerenciamento completo de usuários** (cadastro, consulta, atualização e remoção).  
+Esta API segue os padrões **REST**, utiliza **MongoDB** como banco de dados e está totalmente documentada via **Swagger (OpenAPI 3.0)**.
 
 ---
 
 ## 🛠️ Tecnologias e Infraestrutura
 
-* **Linguagem:** Java 21 (Eclipse Temurin)
-* **Framework:** Spring Boot
-* **Gerenciador de Dependências:** Maven
-* **Banco de Dados:** MongoDB
-* **Documentação:** OpenAPI 3.0 (Swagger)
-* **Containerização:** Docker
+- **Linguagem:** Java 21 (Eclipse Temurin)
+- **Framework:** Spring Boot
+- **Gerenciador de Dependências:** Maven
+- **Banco de Dados:** MongoDB
+- **Documentação:** OpenAPI 3.0 (Swagger)
+- **Containerização:** Docker
 
 ---
 
 ## ⚙️ Configurações da Aplicação
 
-Principais configurações definidas no `application.properties`:
+As configurações principais de conectividade e servidor estão definidas no arquivo `application.properties`:
 
 ```properties
 spring.application.name=ms-usuario
 server.servlet.context-path=/ms-usuario
 server.port=9083
 
+# Persistência MongoDB
 spring.data.mongodb.host=localhost
 spring.data.mongodb.port=27017
 spring.data.mongodb.database=usuarios
@@ -34,7 +36,9 @@ spring.data.mongodb.authentication-database=admin
 spring.data.mongodb.auto-index-creation=true
 ```
 
-🔗 **Base URL da API:**
+---
+
+## 🔗 Base URL da API
 
 ```
 http://localhost:9083/ms-usuario
@@ -44,7 +48,7 @@ http://localhost:9083/ms-usuario
 
 ## 🐳 Dockerização
 
-O microserviço possui um **Dockerfile** para execução em container.
+O microserviço está preparado para execução em containers.
 
 ### 📦 Build da imagem
 
@@ -58,164 +62,135 @@ docker build -t ms-usuario .
 docker run -p 9083:9083 ms-usuario
 ```
 
-> ℹ️ Recomenda-se utilizar `docker-compose` para subir o MongoDB em conjunto com o serviço.
-
 ---
 
-## 🛰️ Endpoints da API
+## 🛰️ Endpoints da API (v1.0.0)
 
 Todos os endpoints estão disponíveis sob o contexto:
 
 ```
-/ms-usuario
+/ms-usuario/users
 ```
 
 ---
 
 ### 1️⃣ Criar Usuário
 
-**POST** `/usuarios`
+**POST** `/users`
 
-* **Resposta:** `201 Created`
-
-```bash
-curl -X POST http://localhost:9083/ms-usuario/usuarios \
-  -H "Content-Type: application/json" \
-  -d '{
-    "usuario": "jdoe",
-    "nome": "João da Silva",
-    "password": "$enh@2025",
-    "email": "joao.silva@email.com",
-    "usuarioAtivo": true
-  }'
-```
-
----
-
-### 2️⃣ Buscar Usuários (com filtros e paginação)
-
-**GET** `/usuarios`
-
-#### Parâmetros opcionais
-
-* `usuario` — Username do usuário
-* `usuarioAtivo` — Indica se o usuário está ativo
-* `page` — Número da página (default: 0)
-* `size` — Quantidade de registros por página
-* `sort` — Ordenação (ex: `nome,asc`)
-
-```bash
-curl -X GET "http://localhost:9083/ms-usuario/usuarios?usuario=jdoe&usuarioAtivo=true&page=0&size=10"
-```
-
-#### Exemplo de resposta (`200 OK`)
+**Request Body (UserRequest):**
 
 ```json
 {
-  "content": [
-    {
-      "id": "652ff3a9b1c2d40012ab45de",
-      "usuario": "jdoe",
-      "nome": "João da Silva",
-      "email": "joao.silva@email.com",
-      "usuarioAtivo": true,
-      "password": "sdfsdfasdf45df4asd21sad5fas2d1fsdf54",
-      "dataCriacao": "2025-10-11T10:15:30Z",
-      "dataAlteracao": "2025-10-11T10:20:45Z"
-    }
-  ],
-  "totalElements": 125,
-  "totalPages": 13,
-  "size": 10,
-  "number": 0
+  "username": "jdoe",
+  "name": "John Doe",
+  "password": "Password@123",
+  "email": "john.doe@email.com",
+  "activeUser": true
 }
 ```
+
+**Resposta:** `201 Created`
+
+---
+
+### 2️⃣ Listar Usuários (Filtros e Paginação)
+
+**GET** `/users`
+
+Permite a busca avançada utilizando parâmetros de consulta.
+
+| Parâmetro | Tipo | Descrição |
+|----------|------|-----------|
+| name | Query | Filtra por nome |
+| email | Query | Filtra por e-mail |
+| username | Query | Filtra por username |
+| active | Query | Filtra por status (`true` / `false`) |
+| limit | Query | Quantidade por página (Default: 10) |
+| offset | Query | Registros a pular (Default: 0) |
 
 ---
 
 ### 3️⃣ Consultar Usuário por ID
 
-**GET** `/usuarios/{id}`
+**GET** `/users/{id}`
 
-```bash
-curl -X GET http://localhost:9083/ms-usuario/usuarios/652ff3a9b1c2d40012ab45de
-```
-
-* **Resposta:** `200 OK`
+**Resposta:** `200 OK`
 
 ---
 
 ### 4️⃣ Consultar Usuário por Username
 
-**GET** `/usuarios/getUser/{username}`
+**GET** `/users/username/{username}`
 
-```bash
-curl -X GET http://localhost:9083/ms-usuario/usuarios/getUser/jdoe
-```
-
-* **Resposta:** `200 OK`
+**Resposta:** `200 OK`
 
 ---
 
 ### 5️⃣ Atualizar Usuário
 
-**PUT** `/usuarios/{id}`
+**PUT** `/users/{id}`
 
-* **Resposta:** `204 No Content`
+- Parâmetro: `id` do usuário
+- Corpo: `UserRequest` atualizado
 
-```bash
-curl -X PUT http://localhost:9083/ms-usuario/usuarios/652ff3a9b1c2d40012ab45de \
-  -H "Content-Type: application/json" \
-  -d '{
-    "usuario": "jdoe",
-    "nome": "João da Silva",
-    "password": "$enh@2026",
-    "email": "joao.silva@email.com",
-    "usuarioAtivo": true
-  }'
-```
+**Resposta:** `204 No Content`
 
 ---
 
 ### 6️⃣ Excluir Usuário
 
-**DELETE** `/usuarios/{id}`
+**DELETE** `/users/{id}`
 
-* **Resposta:** `204 No Content`
-
-```bash
-curl -X DELETE http://localhost:9083/ms-usuario/usuarios/652ff3a9b1c2d40012ab45de
-```
+**Resposta:** `204 No Content`
 
 ---
 
-## ❌ Padrão de Resposta de Erro
+## 📋 Definição dos Dados (Schemas)
 
-Em caso de erro (4xx ou 5xx), a API retorna:
+### UserRequest / UserResponse
+
+| Atributo | Tipo | Descrição |
+|---------|------|-----------|
+| id | String | Identificador único (Read-only) |
+| username | String | Nome de usuário único |
+| name | String | Nome completo |
+| password | String | Senha (Write-only) |
+| email | String | E-mail válido |
+| activeUser | Boolean | Usuário ativo |
+| createdAt | DateTime | Data de criação |
+| updatedAt | DateTime | Última atualização |
+
+---
+
+## ❌ Tratamento de Erros
+
+Em casos de erro, a API retorna um objeto padronizado:
 
 ```json
 {
-  "status": 400,
-  "error": "Bad Request",
-  "message": "Parâmetros inválidos.",
-  "path": "/usuarios",
+  "status": 404,
+  "error": "Not Found",
+  "message": "Resource not found.",
+  "path": "/users/123",
   "timestamp": "2025-10-11T10:30:00Z"
 }
 ```
 
 ---
 
-## 📘 Documentação OpenAPI (Swagger)
+## 📘 Documentação Swagger
 
-Este microserviço segue o padrão **OpenAPI 3.0**, garantindo contratos bem definidos para integrações.
+A interface interativa do Swagger UI está disponível em:
 
-* Todos os endpoints, parâmetros e modelos estão documentados via Swagger
-* Recomenda-se utilizá-lo como **fonte de verdade** para consumo da API
+```
+http://localhost:9083/ms-usuario/swagger-ui.html
+```
 
 ---
 
 ## 📌 Observações Finais
 
-* API preparada para ambientes distribuídos e arquitetura de microserviços
-* Suporte a paginação, filtros e ordenação
-* Pronta para integração com gateways, BFFs e sistemas de autenticação
+- Certifique-se de que o MongoDB esteja ativo e acessível
+- As credenciais devem corresponder ao `application.properties`
+- Todos os filtros de busca são opcionais

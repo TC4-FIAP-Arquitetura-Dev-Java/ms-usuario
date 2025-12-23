@@ -1,17 +1,17 @@
 package com.br.fiap.entrypoinsts.controllers.presenter;
 
-import com.br.fiap.domain.model.UsuarioDomain;
-import com.br.fiap.entrypoinsts.controllers.mappers.UsuarioDtoMapper;
-import com.fiap.ms.usuarioDomain.gen.model.UsuarioRequestDto;
-import com.fiap.ms.usuarioDomain.gen.model.UsuarioResponseDto;
+import com.br.fiap.domain.model.UserDomain;
+import com.br.fiap.entrypoinsts.controllers.mappers.UserDtoMapper;
+import com.fiap.ms.userDomain.gen.model.UserRequestDto;
+import com.fiap.ms.userDomain.gen.model.UserResponseDto;
 
 public class UsuarioPresenter {
 
-    public static UsuarioDomain toUsuarioDomain(UsuarioRequestDto usuarioRequestDto) {
-        return UsuarioDtoMapper.INSTANCE.toUsuarioDomain(usuarioRequestDto);
+    public static UserDomain toUserDomain(UserRequestDto userRequestDto) {
+        return UserDtoMapper.INSTANCE.toUserDomain(userRequestDto);
     }
 
-    public static UsuarioResponseDto toUsuarioRequestDto(UsuarioDomain usuarioDomain) {
-        return UsuarioDtoMapper.INSTANCE.toUsuarioResponseDto(usuarioDomain);
+    public static UserResponseDto toUserResponseDto(UserDomain userDomain) {
+        return UserDtoMapper.INSTANCE.toUserResponseDto(userDomain);
     }
 }

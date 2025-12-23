@@ -1,85 +1,59 @@
 openapi: 3.0.3
+
 info:
-  title: API de Usuários
-  description: API para gerenciamento de usuários do sistema.
+  title: Users API
+  description: API for managing system users.
   version: 1.0.0
 
 tags:
-  - name: Usuarios
-    description: Operações relacionadas a usuários.
+  - name: Users
+    description: Operations related to users.
 
 paths:
 
-  /usuarios/getUser/{username}:
+  /users:
     get:
-      summary: Consultar por usuario
-      operationId: consultarPorUsuario
+      summary: Search and filter users with pagination
+      operationId: listUsers
       tags:
-        - Usuarios
+        - Users
       parameters:
-        - $ref: '#/components/parameters/GetUsername'
+        - $ref: '#/components/parameters/NameQuery'
+        - $ref: '#/components/parameters/EmailQuery'
+        - $ref: '#/components/parameters/UsernameQuery'
+        - $ref: '#/components/parameters/ActiveQuery'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
       responses:
         '200':
-          description: Usuário encontrado com sucesso.
+          description: Users list returned successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UsuarioResponse'
+                $ref: '#/components/schemas/PagedUsersResponse'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '403':
           $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '500':
-          $ref: '#/components/responses/InternalError'
-
-  /usuarios:
-    get:
-      summary: Buscar e filtrar usuários (com paginação)
-      operationId: buscarUsuariosPaginado
-      tags:
-        - Usuarios
-      parameters:
-        - $ref: '#/components/parameters/ConsultaUsuario'
-        - $ref: '#/components/parameters/ConsultaUsuarioAtivo'
-        - $ref: '#/components/parameters/Page'
-        - $ref: '#/components/parameters/Size'
-        - $ref: '#/components/parameters/Sort'
-      responses:
-        '200':
-          description: Lista de usuários encontrada com sucesso.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/BuscarUsuariosPaginado'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
-        '404':
-          $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalError'
 
     post:
-      summary: Criar novo usuário
-      operationId: criarUsuario
+      summary: Create a new user
+      operationId: createUser
       tags:
-        - Usuarios
+        - Users
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UsuarioRequest'
+              $ref: '#/components/schemas/UserRequest'
       responses:
         '201':
-          description: Usuário criado com sucesso.
+          description: User successfully created.
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -89,37 +63,31 @@ paths:
         '500':
           $ref: '#/components/responses/InternalError'
 
-  /usuarios/{id}:
+  /users/{id}:
     get:
-      summary: Consultar usuário por ID (sem paginação)
-      operationId: consultarUsuarioPorId
+      summary: Get user by ID
+      operationId: getUserById
       tags:
-        - Usuarios
+        - Users
       parameters:
         - $ref: '#/components/parameters/PathId'
       responses:
         '200':
-          description: Usuário encontrado com sucesso.
+          description: User found successfully.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UsuarioResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
+                $ref: '#/components/schemas/UserResponse'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalError'
 
     put:
-      summary: Atualizar usuário existente
-      operationId: atualizarUsuario
+      summary: Update an existing user
+      operationId: updateUser
       tags:
-        - Usuarios
+        - Users
       parameters:
         - $ref: '#/components/parameters/PathId'
       requestBody:
@@ -127,101 +95,118 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UsuarioRequest'
+              $ref: '#/components/schemas/UserRequest'
       responses:
         '204':
-          description: Usuário atualizado com sucesso.
+          description: User successfully updated.
         '400':
           $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalError'
 
     delete:
-      summary: Excluir usuário
-      operationId: excluirUsuario
+      summary: Delete a user
+      operationId: deleteUser
       tags:
-        - Usuarios
+        - Users
       parameters:
         - $ref: '#/components/parameters/PathId'
       responses:
         '204':
-          description: Usuário excluído com sucesso.
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '403':
-          $ref: '#/components/responses/Forbidden'
+          description: User successfully deleted.
         '404':
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalError'
 
+  /users/username/{username}:
+    get:
+      summary: Get user by username
+      operationId: getUserByUsername
+      tags:
+        - Users
+      parameters:
+        - $ref: '#/components/parameters/PathUsername'
+      responses:
+        '200':
+          description: User found successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalError'
 
 components:
+
   schemas:
-    UsuarioRequest:
+    UserRequest:
       type: object
+      required:
+        - username
+        - name
+        - email
+        - activeUser
       properties:
-        usuario:
+        username:
           type: string
           example: jdoe
-        nome:
+        name:
           type: string
-          example: João da Silva
+          example: John Doe
         password:
           type: string
-          example: $enh@2025
+          writeOnly: true
+          example: Password@123
         email:
           type: string
-          example: joao.silva@email.com
-        usuarioAtivo:
+          format: email
+          example: john.doe@email.com
+        activeUser:
           type: boolean
           example: true
 
-    UsuarioResponse:
+    UserResponse:
       allOf:
-        - $ref: '#/components/schemas/UsuarioRequest'
         - type: object
           properties:
             id:
               type: string
+              readOnly: true
               example: 652ff3a9b1c2d40012ab45de
-            password:
-              type: string
-              example: sdfsdfasdf45df4asd21sad5fas2d1fsdf54
-            dataCriacao:
+        - $ref: '#/components/schemas/UserRequest'
+        - type: object
+          properties:
+            createdAt:
               type: string
               format: date-time
+              readOnly: true
               example: 2025-10-11T10:15:30Z
-            dataAlteracao:
+            updatedAt:
               type: string
               format: date-time
+              readOnly: true
               example: 2025-10-11T10:20:45Z
 
-    BuscarUsuariosPaginado:
+    PagedUsersResponse:
       type: object
       properties:
         content:
           type: array
           items:
-            $ref: '#/components/schemas/UsuarioResponse'
+            $ref: '#/components/schemas/UserResponse'
         totalElements:
           type: integer
-          example: 125
-        totalPages:
-          type: integer
-          example: 13
-        size:
+          format: int64
+          example: 120
+        limit:
           type: integer
           example: 10
-        number:
+        offset:
           type: integer
           example: 0
 
@@ -236,114 +221,109 @@ components:
           example: Bad Request
         message:
           type: string
-          example: Parâmetros inválidos.
+          example: Invalid parameters.
         path:
           type: string
-          example: /usuarios
+          example: /users
         timestamp:
           type: string
           format: date-time
-          example: 2025-10-11T10:30:00Z
 
   parameters:
-    ConsultaId:
-      name: id
-      in: query
-      required: true
-      schema:
-        type: string
-      description: ID do usuário (obrigatório para consultas sem paginação).
-
-    ConsultaUsuario:
-      name: usuario
-      in: query
-      required: false
-      schema:
-        type: string
-      description: Username usuario.
-
-    ConsultaUsuarioAtivo:
-      name: usuarioAtivo
-      in: query
-      required: false
-      schema:
-        type: boolean
-      description: Indica se o usuário está ativo.
-
-    GetUsername:
-      name: username
-      in: path
-      required: true
-      schema:
-        type: string
-      description: username usuário.
-
     PathId:
       name: id
       in: path
       required: true
       schema:
         type: string
-      description: ID do usuário (obrigatório para update e delete).
+      description: User ID
 
-    Page:
-      name: page
-      in: query
-      required: false
+    PathUsername:
+      name: username
+      in: path
+      required: true
       schema:
-        type: integer
-        example: 0
-      description: Número da página.
+        type: string
+      description: User username
 
-    Size:
-      name: size
+    UsernameQuery:
+      name: username
       in: query
-      required: false
+      schema:
+        type: string
+      description: Filter users by username
+
+    ActiveQuery:
+      name: active
+      in: query
+      schema:
+        type: boolean
+      description: Filter users by active status
+
+    NameQuery:
+      name: name
+      in: query
+      schema:
+        type: string
+      description: Filter users by name
+
+    EmailQuery:
+      name: email
+      in: query
+      schema:
+        type: string
+        format: email
+      description: Filter users by email
+
+    Limit:
+      name: limit
+      in: query
       schema:
         type: integer
         example: 10
-      description: Quantidade de registros por página.
+        minimum: 1
+      description: Number of records to return
 
-    Sort:
-      name: sort
+    Offset:
+      name: offset
       in: query
-      required: false
       schema:
-        type: string
-        example: nome,asc
-      description: "Campo e direção de ordenação (ex: nome,asc ou id,desc)."
+        type: integer
+        example: 0
+        minimum: 0
+      description: Number of records to skip
 
   responses:
     BadRequest:
-      description: Requisição inválida.
+      description: Invalid request.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
 
     Unauthorized:
-      description: Falha de autenticação.
+      description: Authentication failed.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
 
     Forbidden:
-      description: Acesso negado.
+      description: Access denied.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
 
     NotFound:
-      description: Recurso não encontrado.
+      description: Resource not found.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ApiError'
 
     InternalError:
-      description: Erro interno do servidor.
+      description: Internal server error.
       content:
         application/json:
           schema:
