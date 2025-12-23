@@ -5,6 +5,7 @@ import com.br.fiap.application.usecase.ListUsersUseCase;
 import com.br.fiap.application.usecase.GetUserByIdUseCase;
 import com.br.fiap.application.usecase.CreateUserUseCase;
 import com.br.fiap.application.usecase.DeleteUserUseCase;
+import com.br.fiap.entrypoinsts.controllers.mappers.UserDtoMapper;
 import com.fiap.ms.userDomain.gen.model.UserRequestDto;
 import com.fiap.ms.userDomain.gen.model.UserResponseDto;
 import org.junit.jupiter.api.Test;
@@ -44,6 +45,9 @@ class UserControllerTest {
 
     @Mock
     private DeleteUserUseCase deleteUserUseCase;
+
+    @Mock
+    private UserDtoMapper userDtoMapper;
 
     @Test
     void atualizarUsuario_sucesso() {

@@ -4,8 +4,8 @@ import com.br.fiap.application.dto.UserFilter;
 import com.br.fiap.application.gateways.UserGateway;
 import com.br.fiap.application.usecase.ListUsersUseCase;
 import com.br.fiap.domain.model.UserDomain;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public class ListUsersUseCaseImpl implements ListUsersUseCase {
 
@@ -16,7 +16,7 @@ public class ListUsersUseCaseImpl implements ListUsersUseCase {
     }
 
     @Override
-    public List<UserDomain> findAll(UserFilter filter) {
-        return userGateway.findAll(filter);
+    public Page<UserDomain> findAll(UserFilter filter, Pageable pageable) {
+        return userGateway.findWithFilter(filter, pageable);
     }
 }

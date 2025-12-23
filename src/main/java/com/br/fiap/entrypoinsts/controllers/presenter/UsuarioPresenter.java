@@ -11,7 +11,7 @@ public class UsuarioPresenter {
         return UserDtoMapper.INSTANCE.toUserDomain(userRequestDto);
     }
 
-    public static UserResponseDto toUserRequestDto(UserDomain userDomain) {
+    public static UserResponseDto toUserResponseDto(UserDomain userDomain) {
         return UserDtoMapper.INSTANCE.toUserResponseDto(userDomain);
     }
 }

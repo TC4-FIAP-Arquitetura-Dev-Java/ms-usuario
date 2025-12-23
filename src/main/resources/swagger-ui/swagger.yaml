@@ -18,6 +18,8 @@ paths:
       tags:
         - Users
       parameters:
+        - $ref: '#/components/parameters/NameQuery'
+        - $ref: '#/components/parameters/EmailQuery'
         - $ref: '#/components/parameters/UsernameQuery'
         - $ref: '#/components/parameters/ActiveQuery'
         - $ref: '#/components/parameters/Limit'
@@ -199,6 +201,7 @@ components:
             $ref: '#/components/schemas/UserResponse'
         totalElements:
           type: integer
+          format: int64
           example: 120
         limit:
           type: integer
@@ -251,11 +254,26 @@ components:
       description: Filter users by username
 
     ActiveQuery:
-      name: activeUser
+      name: active
       in: query
       schema:
         type: boolean
       description: Filter users by active status
+
+    NameQuery:
+      name: name
+      in: query
+      schema:
+        type: string
+      description: Filter users by name
+
+    EmailQuery:
+      name: email
+      in: query
+      schema:
+        type: string
+        format: email
+      description: Filter users by email
 
     Limit:
       name: limit

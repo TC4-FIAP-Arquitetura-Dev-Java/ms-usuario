@@ -8,6 +8,8 @@ import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface UserDtoMapper {
 
@@ -19,4 +21,6 @@ public interface UserDtoMapper {
     UserDomain toUserDomain(UserRequestDto userRequestDto);
 
     UserResponseDto toUserResponseDto(UserDomain userDomain);
+
+    List<UserResponseDto> toUserResponseDtos(List<UserDomain> userDomains);
 }

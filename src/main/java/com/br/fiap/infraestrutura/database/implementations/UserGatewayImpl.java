@@ -7,6 +7,9 @@ import com.br.fiap.infraestrutura.database.entities.UserDocument;
 import com.br.fiap.infraestrutura.database.mapper.UserDocumentMapper;
 import com.br.fiap.infraestrutura.database.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import org.springframework.data.mongodb.core.query.Query;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,17 +41,6 @@ public class UserGatewayImpl implements UserGateway {
     }
 
     @Override
-    public List<UserDomain> findAll(UserFilter filter) {
-        Query query = buildQuery(filter);
-
-        return mongoTemplate
-                .find(query, UserDocument.class)
-                .stream()
-                .map(userDocumentMapper::toDomain)
-                .toList();
-    }
-
-    @Override
     public void save(UserDomain domain) {
         UserDocument userDocument = UserDocumentMapper.INSTANCE.toDocument(domain);
         userRepository.save(userDocument);
@@ -65,12 +58,23 @@ public class UserGatewayImpl implements UserGateway {
                 .map(UserDocumentMapper.INSTANCE::toDomain);
     }
 
+    @Override
+    public Page<UserDomain> findWithFilter(UserFilter filter, Pageable pageable) {
+
+        Query query = buildQuery(filter);
+        long total = mongoTemplate.count(query, UserDocument.class);
+        query.with(pageable);
+
+        List<UserDomain> userDomains = mongoTemplate.find(query, UserDocument.class)
+                .stream()
+                .map(UserDocumentMapper.INSTANCE::toDomain)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(userDomains, pageable, total);
+    }
+
     private Query buildQuery(UserFilter filter) {
         Query query = new Query();
-
-        if(filter == null){
-            filter = UserFilter.empty();
-        }
 
         // Filter by name
         if (filter.name() != null && !filter.name().isBlank()) {
@@ -87,19 +91,8 @@ public class UserGatewayImpl implements UserGateway {
             query.addCriteria(Criteria.where("username").is(filter.username().trim()));
         }
 
-        //Limit
-        if (filter.limit() != null && filter.limit() > 0) {
-            query.limit(filter.limit());
-        }
-
-        // offset
-        if (filter.offset() != null) {
-            int offset = filter.offset();
-
-            if (offset < 0) {
-                offset = 0;
-            }
-            query.skip(offset);
+        if (filter.activeUser() != null) {
+            query.addCriteria(Criteria.where("activeUser").is(filter.activeUser().booleanValue()));
         }
         return query;
     }
