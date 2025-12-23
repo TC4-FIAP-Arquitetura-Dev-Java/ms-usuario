@@ -27,11 +27,11 @@ class GetUserByIdUseCaseImplTest {
     void buscarUsuarioPorId_sucesso() {
         String id = "123";
         UserDomain userDomain = getUsuarioDomain();
-        when(userDomainService.buscarUsuarioPorId(id)).thenReturn(userDomain);
+        when(userDomainService.getById(id)).thenReturn(userDomain);
 
-        UserDomain domain = consultarUsuarioPorIdUseCase.buscarUsuarioPorId(id);
+        UserDomain domain = consultarUsuarioPorIdUseCase.getById(id);
 
         assertNotNull(domain);
-        verify(userDomainService, times(1)).buscarUsuarioPorId(id);
+        verify(userDomainService, times(1)).getById(id);
     }
 }

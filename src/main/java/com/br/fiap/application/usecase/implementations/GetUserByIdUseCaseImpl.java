@@ -13,7 +13,7 @@ public class GetUserByIdUseCaseImpl implements GetUserByIdUseCase {
     }
 
     @Override
-    public UserDomain buscarUsuarioPorId(String id) {
-        return userDomainService.buscarUsuarioPorId(id);
+    public UserDomain getById(String id) {
+        return userDomainService.getById(id);
     }
 }

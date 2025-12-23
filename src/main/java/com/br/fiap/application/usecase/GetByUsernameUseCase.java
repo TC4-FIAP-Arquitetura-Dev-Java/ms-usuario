@@ -4,5 +4,5 @@ import com.br.fiap.domain.model.UserDomain;
 
 public interface GetByUsernameUseCase {
 
-    UserDomain buscarPorUsuario(String username);
+    UserDomain getByUsername(String username);
 }

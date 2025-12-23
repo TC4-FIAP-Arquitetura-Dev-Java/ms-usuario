@@ -4,9 +4,9 @@ import com.br.fiap.domain.model.UserDomain;
 
 public interface UserDomainService {
 
-    UserDomain buscarUsuarioPorId(String id);
+    UserDomain getById(String id);
 
-    UserDomain buscarPorUsuario(String id);
+    UserDomain getByUsername(String id);
 
-    void verificarExistenciaEmailouUsuario(String email, String usuario);
+    void checkByEmailOrUsername(String email, String usuario);
 }

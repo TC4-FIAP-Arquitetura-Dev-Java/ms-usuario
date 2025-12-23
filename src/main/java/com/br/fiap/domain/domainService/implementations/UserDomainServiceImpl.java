@@ -15,22 +15,22 @@ public class UserDomainServiceImpl implements UserDomainService {
     }
 
     @Override
-    public UserDomain buscarUsuarioPorId(String id) {
-        return userGateway.buscarUsuarioPorId(id).orElseThrow(
+    public UserDomain getById(String id) {
+        return userGateway.getById(id).orElseThrow(
                 () -> new UserNotFoundException("O usuário informado não está cadastrado.")
         );
     }
 
     @Override
-    public UserDomain buscarPorUsuario(String usuario) {
-        return userGateway.buscarPorUsuario(usuario).orElseThrow(
+    public UserDomain getByUsername(String username) {
+        return userGateway.getByUsername(username).orElseThrow(
                 () -> new UserNotFoundException("O usuário informado não está cadastrado.")
         );
     }
 
     @Override
-    public void verificarExistenciaEmailouUsuario(String email, String usuario) {
-        if(userGateway.verificarExistenciaEmailouUsuario(email, usuario).isPresent()){
+    public void checkByEmailOrUsername(String email, String username) {
+        if(userGateway.checkExistenceByEmailOrUser(email, username).isPresent()){
             throw new AlreadyExistsException("Usuário ou e-mail já cadastrados!");
         }
     }

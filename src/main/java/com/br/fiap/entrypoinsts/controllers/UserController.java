@@ -1,27 +1,24 @@
 package com.br.fiap.entrypoinsts.controllers;
 
-import com.br.fiap.application.dto.UserFilter;
 import com.br.fiap.application.usecase.*;
 import com.br.fiap.domain.model.UserDomain;
 import com.br.fiap.entrypoinsts.controllers.mappers.UserDtoMapper;
 import com.br.fiap.entrypoinsts.controllers.mappers.UserFilterMapper;
 import com.br.fiap.entrypoinsts.controllers.presenter.UsuarioPresenter;
-import com.fiap.ms.usuarioDomain.UsuariosApi;
-import com.fiap.ms.usuarioDomain.gen.model.BuscarUsuariosPaginadoDto;
-import com.fiap.ms.usuarioDomain.gen.model.UsuarioRequestDto;
-import com.fiap.ms.usuarioDomain.gen.model.UsuarioResponseDto;
+import com.fiap.ms.userDomain.UsersApi;
+import com.fiap.ms.userDomain.gen.model.PagedUsersResponseDto;
+import com.fiap.ms.userDomain.gen.model.UserRequestDto;
+import com.fiap.ms.userDomain.gen.model.UserResponseDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping("/v1")
-public class UserController implements UsuariosApi {
+public class UserController implements UsersApi {
 
     private final UpdateUserUseCase updateUserUseCase;
     private final ListUsersUseCase listUsersUseCase;
@@ -50,46 +47,51 @@ public class UserController implements UsuariosApi {
     }
 
     @Override
-    public ResponseEntity<Void> _atualizarUsuario(String id, UsuarioRequestDto usuarioRequestDto) {
-        UserDomain userDomain = UsuarioPresenter.toUsuarioDomain(usuarioRequestDto);
-        updateUserUseCase.atualizar(id, userDomain);
-        return ResponseEntity.noContent().build();
-    }
-
-    @Override
-    public ResponseEntity<BuscarUsuariosPaginadoDto> _buscarUsuariosPaginado(String usuario, Boolean usuarioAtivo, Integer page, Integer size, String sort) {
-//        UserFilter filter = userFilterMapper.toFilter()
-//        List<UserDomain> domain = listUsersUseCase.findAll(filter);
-//        List<BuscarUsuariosPaginadoDto> response = userDtoMapper.toUsuarioResponseDto(domain);
-//        return ResponseEntity.ok(response);
-
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<UsuarioResponseDto> _consultarPorUsuario(String usuario) {
-        UserDomain userDomain = getByUsernameUseCase.buscarPorUsuario(usuario);
-        UsuarioResponseDto usuarioResponseDto = UsuarioPresenter.toUsuarioRequestDto(userDomain);
-        return ResponseEntity.ok(usuarioResponseDto);
-    }
-
-    @Override
-    public ResponseEntity<UsuarioResponseDto> _consultarUsuarioPorId(String id) {
-        UserDomain userDomain = getUserByIdUseCase.buscarUsuarioPorId(id);
-        UsuarioResponseDto usuarioResponseDto = UsuarioPresenter.toUsuarioRequestDto(userDomain);
-        return ResponseEntity.ok(usuarioResponseDto);
-    }
-
-    @Override
-    public ResponseEntity<Void> _criarUsuario(UsuarioRequestDto usuarioRequestDto) {
-        UserDomain userDomain = UsuarioPresenter.toUsuarioDomain(usuarioRequestDto);
-        createUserUseCase.criar(userDomain);
+    public ResponseEntity<Void> _createUser(UserRequestDto userRequestDto) {
+        UserDomain userDomain = UsuarioPresenter.toUserDomain(userRequestDto);
+        createUserUseCase.create(userDomain);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
-    public ResponseEntity<Void> _excluirUsuario(String id) {
-        deleteUserUseCase.deletar(id);
+    public ResponseEntity<Void> _deleteUser(String id) {
+        deleteUserUseCase.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<UserResponseDto> _getUserById(String id) {
+        UserDomain userDomain = getUserByIdUseCase.getById(id);
+        UserResponseDto userResponseDto = UsuarioPresenter.toUserRequestDto(userDomain);
+        return ResponseEntity.ok(userResponseDto);
+    }
+
+    @Override
+    public ResponseEntity<UserResponseDto> _getUserByUsername(String username) {
+        UserDomain userDomain = getByUsernameUseCase.getByUsername(username);
+        UserResponseDto userResponseDto = UsuarioPresenter.toUserRequestDto(userDomain);
+        return ResponseEntity.ok(userResponseDto);
+    }
+
+    @Override
+    public ResponseEntity<PagedUsersResponseDto> _listUsers(String username, Boolean active, Integer limit, Integer offset) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> _updateUser(String id, UserRequestDto userRequestDto) {
+        UserDomain userDomain = UsuarioPresenter.toUserDomain(userRequestDto);
+        updateUserUseCase.update(id, userDomain);
+        return ResponseEntity.noContent().build();
+    }
+
+//    @Override
+//    public ResponseEntity<BuscarUsuariosPaginadoDto> _buscarUsuariosPaginado(String usuario, Boolean usuarioAtivo, Integer page, Integer size, String sort) {
+////        UserFilter filter = userFilterMapper.toFilter()
+////        List<UserDomain> domain = listUsersUseCase.findAll(filter);
+////        List<BuscarUsuariosPaginadoDto> response = userDtoMapper.toUsuarioResponseDto(domain);
+////        return ResponseEntity.ok(response);
+//
+//        return null;
+//    }
 }

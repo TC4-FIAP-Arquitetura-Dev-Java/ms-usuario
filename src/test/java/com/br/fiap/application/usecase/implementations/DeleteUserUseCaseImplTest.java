@@ -33,20 +33,20 @@ class DeleteUserUseCaseImplTest {
     void deletarUsuario_sucesso() {
         UserDomain domain = getUsuarioDomain();
         String id = "123";
-        when(userDomainService.buscarUsuarioPorId(id)).thenReturn(domain);
-        doNothing().when(userGateway).deletar(domain);
+        when(userDomainService.getById(id)).thenReturn(domain);
+        doNothing().when(userGateway).delete(domain);
 
-        excluirUsuarioUseCase.deletar(id);
+        excluirUsuarioUseCase.delete(id);
 
-        verify(userGateway, times(1)).deletar(domain);
-        verify(userDomainService, times(1)).buscarUsuarioPorId(id);
+        verify(userGateway, times(1)).delete(domain);
+        verify(userDomainService, times(1)).getById(id);
     }
 
     @Test
     void deletarUsuario_erro() {
         String id = "123";
-        when(userDomainService.buscarUsuarioPorId(id)).thenThrow(UserNotFoundException.class);
+        when(userDomainService.getById(id)).thenThrow(UserNotFoundException.class);
 
-        assertThrows(UserNotFoundException.class, () -> excluirUsuarioUseCase.deletar(id));
+        assertThrows(UserNotFoundException.class, () -> excluirUsuarioUseCase.delete(id));
     }
 }

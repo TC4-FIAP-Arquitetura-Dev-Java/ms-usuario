@@ -32,29 +32,29 @@ class UserDomainServiceImplTest {
     void buscarUsuarioPorId_sucesso() {
         String id = "123";
         UserDomain userDomain = getUsuarioDomain();
-        when(userGateway.buscarUsuarioPorId(id)).thenReturn(Optional.of(userDomain));
+        when(userGateway.getById(id)).thenReturn(Optional.of(userDomain));
 
-        UserDomain domain = usuarioDomainServiceImpl.buscarUsuarioPorId(id);
+        UserDomain domain = usuarioDomainServiceImpl.getById(id);
         assertNotNull(domain);
-        verify(userGateway, times(1)).buscarUsuarioPorId(id);
+        verify(userGateway, times(1)).getById(id);
     }
 
     @Test
     void buscarUsuarioPorId_erro() {
         String id = "123";
-        when(userGateway.buscarUsuarioPorId(id)).thenReturn(Optional.empty());
+        when(userGateway.getById(id)).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> usuarioDomainServiceImpl.buscarUsuarioPorId(id));
+        assertThrows(UserNotFoundException.class, () -> usuarioDomainServiceImpl.getById(id));
     }
 
     @Test
     void verificarExistenciaEmailouUsuario_sucesso() {
         String email = "marcos.silva@email.com";
         String usuario = "marcos.silva";
-        when(userGateway.verificarExistenciaEmailouUsuario(email, usuario)).thenReturn(Optional.empty());
+        when(userGateway.checkExistenceByEmailOrUser(email, usuario)).thenReturn(Optional.empty());
 
-        usuarioDomainServiceImpl.verificarExistenciaEmailouUsuario(email, usuario);
-        verify(userGateway, times(1)).verificarExistenciaEmailouUsuario(email, usuario);
+        usuarioDomainServiceImpl.checkByEmailOrUsername(email, usuario);
+        verify(userGateway, times(1)).checkExistenceByEmailOrUser(email, usuario);
     }
 
     @Test
@@ -63,9 +63,9 @@ class UserDomainServiceImplTest {
         String usuario = "marcos.silva";
         UserDomain userDomain = getUsuarioDomain();
 
-        when(userGateway.verificarExistenciaEmailouUsuario(email, usuario)).thenReturn(Optional.of(userDomain));
+        when(userGateway.checkExistenceByEmailOrUser(email, usuario)).thenReturn(Optional.of(userDomain));
 
         assertThrows(AlreadyExistsException.class, () ->
-                usuarioDomainServiceImpl.verificarExistenciaEmailouUsuario(email, usuario));
+                usuarioDomainServiceImpl.checkByEmailOrUsername(email, usuario));
     }
 }

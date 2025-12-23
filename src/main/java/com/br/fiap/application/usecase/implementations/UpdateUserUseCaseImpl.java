@@ -23,9 +23,9 @@ public class UpdateUserUseCaseImpl implements UpdateUserUseCase {
     }
 
     @Override
-    public void atualizar(String id, UserDomain userDomain) {
+    public void update(String id, UserDomain userDomain) {
         validarCamposObrigatorios(userDomain);
-        UserDomain domain = userDomainService.buscarUsuarioPorId(id);
+        UserDomain domain = userDomainService.getById(id);
 
         domain.setEmail(userDomain.getEmail());
         domain.setName(userDomain.getName());

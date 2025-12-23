@@ -12,11 +12,11 @@ public interface UserDocumentMapper {
 
     UserDocumentMapper INSTANCE = Mappers.getMapper(UserDocumentMapper.class);
 
-    @Mapping(target = "createdAt", expression = "java(usuarioDocument.getCreatedAt() != null ? usuarioDocument.getCreatedAt().atOffset(java.time.ZoneOffset.UTC) : null)")
-    @Mapping(target = "updatedAt", expression = "java(usuarioDocument.getUpdatedAt() != null ? usuarioDocument.getUpdatedAt().atOffset(java.time.ZoneOffset.UTC) : null)")
+    @Mapping(target = "createdAt", expression = "java(userDocument.getCreatedAt() != null ? userDocument.getCreatedAt().atOffset(java.time.ZoneOffset.UTC) : null)")
+    @Mapping(target = "updatedAt", expression = "java(userDocument.getUpdatedAt() != null ? userDocument.getUpdatedAt().atOffset(java.time.ZoneOffset.UTC) : null)")
     UserDomain toDomain(UserDocument userDocument);
 
-    @Mapping(target = "createdAt", expression = "java(usuarioDomain.getCreatedAt() != null ? usuarioDomain.getCreatedAt().toInstant() : null)")
-    @Mapping(target = "updatedAt", expression = "java(usuarioDomain.getUpdatedAt() != null ? usuarioDomain.getUpdatedAt().toInstant() : null)")
+    @Mapping(target = "createdAt", expression = "java(userDomain.getCreatedAt() != null ? userDomain.getCreatedAt().toInstant() : null)")
+    @Mapping(target = "updatedAt", expression = "java(userDomain.getUpdatedAt() != null ? userDomain.getUpdatedAt().toInstant() : null)")
     UserDocument toDocument(UserDomain userDomain);
 }

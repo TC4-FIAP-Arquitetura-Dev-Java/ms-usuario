@@ -23,9 +23,9 @@ public class CreateUserUseCaseImpl implements CreateUserUseCase {
     }
 
     @Override
-    public void criar(UserDomain userDomain) {
+    public void create(UserDomain userDomain) {
         validarCamposObrigatorios(userDomain);
-        userDomainService.verificarExistenciaEmailouUsuario(userDomain.getEmail(), userDomain.getUsername());
+        userDomainService.checkByEmailOrUsername(userDomain.getEmail(), userDomain.getUsername());
         userDomain.setUsername(userDomain.getUsername().toLowerCase());
         userDomain.setPassword(secretKeyGenerator.encode(userDomain.getPassword()));
         userGateway.save(userDomain);

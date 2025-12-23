@@ -8,8 +8,8 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface UserFilterMapper {
 
-    UserFilterMapper INSTANCE = Mappers.getMapper(UserFilterMapper.class);
-
-    UserFilter toFilter(String name, String email, String username, Boolean active, Integer limit, Integer offset);
+//    UserFilterMapper INSTANCE = Mappers.getMapper(UserFilterMapper.class);
+//
+//    UserFilter toFilter(String name, String email, String username, Boolean active, Integer limit, Integer offset);
 
 }

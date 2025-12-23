@@ -3,5 +3,5 @@ package com.br.fiap.application.usecase;
 import com.br.fiap.domain.model.UserDomain;
 
 public interface CreateUserUseCase {
-    void criar(UserDomain userDomain);
+    void create(UserDomain userDomain);
 }

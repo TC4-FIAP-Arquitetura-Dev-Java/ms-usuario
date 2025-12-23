@@ -1,5 +1,6 @@
 package com.br.fiap.application.usecase.implementations;
 
+import com.br.fiap.application.gateways.SecretKeyGenerator;
 import com.br.fiap.application.gateways.UserGateway;
 import com.br.fiap.domain.domainService.UserDomainService;
 import com.br.fiap.domain.exception.AlreadyExistsException;
@@ -12,10 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.br.fiap.util.mocks.UsuarioDomainMocks.getUsuarioDomain;
 import static org.junit.Assert.assertThrows;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CreateUserUseCaseImplTest {
@@ -27,6 +25,9 @@ class CreateUserUseCaseImplTest {
     private UserDomainService userDomainService;
 
     @Mock
+    private SecretKeyGenerator secretKeyGenerator;
+
+    @Mock
     private UserGateway userGateway;
 
     @Test
@@ -35,13 +36,15 @@ class CreateUserUseCaseImplTest {
         String email = "marcos.silva@email.com";
         String usuario = "marcos.silva";
 
-        doNothing().when(userDomainService).verificarExistenciaEmailouUsuario(email, usuario);
+        when(secretKeyGenerator.encode(any())).thenReturn("senhaCriptografada");
+
+        doNothing().when(userDomainService).checkByEmailOrUsername(email, usuario);
         doNothing().when(userGateway).save(userDomain);
 
-        criarUsuarioUseCase.criar(userDomain);
+        criarUsuarioUseCase.create(userDomain);
 
         verify(userGateway, times(1)).save(userDomain);
-        verify(userDomainService, times(1)).verificarExistenciaEmailouUsuario(email, usuario);
+        verify(userDomainService, times(1)).checkByEmailOrUsername(email, usuario);
     }
 
     @Test
@@ -50,8 +53,10 @@ class CreateUserUseCaseImplTest {
         String email = "marcos.silva@email.com";
         String usuario = "marcos.silva";
 
-        doThrow(AlreadyExistsException.class).when(userDomainService).verificarExistenciaEmailouUsuario(email, usuario);
+//        when(secretKeyGenerator.encode(any())).thenReturn("senhaCriptografada");
 
-        assertThrows(AlreadyExistsException.class, () -> criarUsuarioUseCase.criar(userDomain));
+        doThrow(AlreadyExistsException.class).when(userDomainService).checkByEmailOrUsername(email, usuario);
+
+        assertThrows(AlreadyExistsException.class, () -> criarUsuarioUseCase.create(userDomain));
     }
 }

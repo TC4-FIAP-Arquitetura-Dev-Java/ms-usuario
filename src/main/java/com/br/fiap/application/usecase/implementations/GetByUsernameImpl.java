@@ -13,7 +13,7 @@ public class GetByUsernameImpl implements GetByUsernameUseCase {
     }
 
     @Override
-    public UserDomain buscarPorUsuario(String username) {
-        return this.userDomainService.buscarPorUsuario(username);
+    public UserDomain getByUsername(String username) {
+        return this.userDomainService.getByUsername(username);
     }
 }

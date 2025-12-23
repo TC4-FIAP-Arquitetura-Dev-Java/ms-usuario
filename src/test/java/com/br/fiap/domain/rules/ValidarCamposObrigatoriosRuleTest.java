@@ -20,11 +20,11 @@ class ValidarCamposObrigatoriosRuleTest {
 
     @Test
     void deveLancarExcecaoQuandoTodosCamposNulos() {
-        UserDomain usuario = new UserDomain();
+        UserDomain user = new UserDomain();
 
         FieldRequiredException exception = assertThrows(
                 FieldRequiredException.class,
-                () -> ValidarCamposObrigatoriosRule.validarCamposObrigatorios(usuario)
+                () -> ValidarCamposObrigatoriosRule.validarCamposObrigatorios(user)
         );
 
         assertEquals(HttpStatus.BAD_REQUEST + " \"Existem campos obrigatorios que não foram preenchidos\"", exception.getMessage());
@@ -33,8 +33,8 @@ class ValidarCamposObrigatoriosRuleTest {
     @Test
     void deveLancarExcecaoQuandoTodosCamposVazios() {
         UserDomain usuario = new UserDomain();
-        usuario.setUsuario(" ");
-        usuario.setNome("");
+        usuario.setUsername(" ");
+        usuario.setName("");
         usuario.setEmail("  ");
 
         FieldRequiredException exception = assertThrows(
@@ -48,8 +48,8 @@ class ValidarCamposObrigatoriosRuleTest {
     @Test
     void naoDeveLancarExcecaoQuandoUmCampoAusente() {
         UserDomain usuario = new UserDomain();
-        usuario.setUsuario("marcos.silva");
-        usuario.setNome("Marcos Silva");
+        usuario.setUsername("marcos.silva");
+        usuario.setName("Marcos Silva");
         usuario.setEmail(null);
 
         assertDoesNotThrow(() -> ValidarCamposObrigatoriosRule.validarCamposObrigatorios(usuario));

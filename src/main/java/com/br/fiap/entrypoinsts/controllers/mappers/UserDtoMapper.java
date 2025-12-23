@@ -1,8 +1,8 @@
 package com.br.fiap.entrypoinsts.controllers.mappers;
 
 import com.br.fiap.domain.model.UserDomain;
-import com.fiap.ms.usuarioDomain.gen.model.UsuarioRequestDto;
-import com.fiap.ms.usuarioDomain.gen.model.UsuarioResponseDto;
+import com.fiap.ms.userDomain.gen.model.UserRequestDto;
+import com.fiap.ms.userDomain.gen.model.UserResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
@@ -16,8 +16,7 @@ public interface UserDtoMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    UserDomain toUserDomain(UsuarioRequestDto usuarioRequestDto);
+    UserDomain toUserDomain(UserRequestDto userRequestDto);
 
-    UsuarioResponseDto toUserResponseDto(UserDomain userDomain);
-
+    UserResponseDto toUserResponseDto(UserDomain userDomain);
 }

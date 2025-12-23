@@ -17,8 +17,8 @@ public class DeleteUserUseCaseImpl implements DeleteUserUseCase {
     }
 
     @Override
-    public void deletar(String id) {
-        UserDomain domain = userDomainService.buscarUsuarioPorId(id);
-        userGateway.deletar(domain);
+    public void delete(String id) {
+        UserDomain domain = userDomainService.getById(id);
+        userGateway.delete(domain);
     }
 }
