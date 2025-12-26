@@ -142,7 +142,6 @@ paths:
           $ref: '#/components/responses/InternalError'
 
 components:
-
   schemas:
     UserRequest:
       type: object
@@ -166,6 +165,8 @@ components:
           type: string
           format: email
           example: john.doe@email.com
+        roleEnum:
+          $ref: '#/components/schemas/RoleEnum'
         activeUser:
           type: boolean
           example: true
@@ -209,6 +210,15 @@ components:
         offset:
           type: integer
           example: 0
+
+    RoleEnum:
+      type: string
+      description: Papel do usuário dentro do sistema
+      enum:
+        - ADMIN
+        - USER
+        - GUEST
+      example: USER
 
     ApiError:
       type: object

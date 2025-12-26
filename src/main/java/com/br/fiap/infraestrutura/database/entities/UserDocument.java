@@ -1,5 +1,6 @@
 package com.br.fiap.infraestrutura.database.entities;
 
+import com.br.fiap.domain.enums.RoleEnum;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -19,6 +20,8 @@ public class UserDocument {
     private String name;
 
     private String password;
+
+    private RoleEnum roleEnum;
 
     @Indexed(unique = true)
     private String username;

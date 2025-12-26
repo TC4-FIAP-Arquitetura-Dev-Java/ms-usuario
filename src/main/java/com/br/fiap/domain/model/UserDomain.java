@@ -1,5 +1,7 @@
 package com.br.fiap.domain.model;
 
+import com.br.fiap.domain.enums.RoleEnum;
+
 import java.time.OffsetDateTime;
 
 public class UserDomain {
@@ -10,6 +12,7 @@ public class UserDomain {
     private String username;
     private String email;
     private Boolean activeUser;
+    private RoleEnum roleEnum;
     private OffsetDateTime createdAt;
     private OffsetDateTime updatedAt;
 
@@ -35,12 +38,12 @@ public class UserDomain {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {
@@ -51,12 +54,12 @@ public class UserDomain {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -73,6 +76,14 @@ public class UserDomain {
 
     public void setActiveUser(Boolean activeUser) {
         this.activeUser = activeUser;
+    }
+
+    public RoleEnum getRoleEnum() {
+        return roleEnum;
+    }
+
+    public void setRoleEnum(RoleEnum roleEnum) {
+        this.roleEnum = roleEnum;
     }
 
     public OffsetDateTime getCreatedAt() {
