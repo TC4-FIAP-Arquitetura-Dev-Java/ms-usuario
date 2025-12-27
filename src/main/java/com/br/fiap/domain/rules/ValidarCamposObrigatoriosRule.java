@@ -6,11 +6,11 @@ import com.br.fiap.domain.model.UserDomain;
 public class ValidarCamposObrigatoriosRule {
 
     public static void validarCamposObrigatorios(UserDomain userDomain) {
-        if (isNuloOuVazio(userDomain.getUsername()) &&
-                isNuloOuVazio(userDomain.getName()) &&
-                isNuloOuVazio(userDomain.getPassword()) &&
+        if (isNuloOuVazio(userDomain.getUsername()) ||
+                isNuloOuVazio(userDomain.getName()) ||
+                isNuloOuVazio(userDomain.getPassword()) ||
                 isNuloOuVazio(userDomain.getEmail())) {
-            throw new FieldRequiredException("Existem campos obrigatorios que não foram preenchidos");
+            throw new FieldRequiredException("The required fields are empty");
         }
     }
 
