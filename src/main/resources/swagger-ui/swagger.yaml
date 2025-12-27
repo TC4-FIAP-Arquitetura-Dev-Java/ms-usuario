@@ -1,7 +1,7 @@
 openapi: 3.0.3
 
 info:
-  title: Users API
+  title: MS Usuario API
   description: API for managing system users.
   version: 1.0.0
 
