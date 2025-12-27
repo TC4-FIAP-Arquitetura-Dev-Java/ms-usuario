@@ -27,7 +27,7 @@ class ValidarCamposObrigatoriosRuleTest {
                 () -> ValidarCamposObrigatoriosRule.validarCamposObrigatorios(user)
         );
 
-        assertEquals(HttpStatus.BAD_REQUEST + " \"Existem campos obrigatorios que não foram preenchidos\"", exception.getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST + " \"There are some required fields are empty\"", exception.getMessage());
     }
 
     @Test
@@ -42,7 +42,7 @@ class ValidarCamposObrigatoriosRuleTest {
                 () -> ValidarCamposObrigatoriosRule.validarCamposObrigatorios(usuario)
         );
 
-        assertEquals(HttpStatus.BAD_REQUEST + " \"Existem campos obrigatorios que não foram preenchidos\"", exception.getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST + " \"There are some required fields are empty\"", exception.getMessage());
     }
 
     @Test

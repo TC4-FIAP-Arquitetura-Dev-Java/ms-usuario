@@ -10,7 +10,7 @@ public class ValidarCamposObrigatoriosRule {
                 isNuloOuVazio(userDomain.getName()) &&
                 isNuloOuVazio(userDomain.getPassword()) &&
                 isNuloOuVazio(userDomain.getEmail())) {
-            throw new FieldRequiredException("Existem campos obrigatorios que não foram preenchidos");
+            throw new FieldRequiredException("There are some required fields are empty");
         }
     }
 
