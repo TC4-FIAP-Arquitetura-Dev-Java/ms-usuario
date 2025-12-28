@@ -1,5 +1,6 @@
 package com.br.fiap.util.mocks;
 
+import com.br.fiap.application.dto.UserFilter;
 import com.br.fiap.domain.model.UserDomain;
 
 import java.time.OffsetDateTime;
@@ -18,5 +19,9 @@ public class UsuarioDomainMocks {
         domain.setCreatedAt(OffsetDateTime.of(2024, 10, 10, 12, 0, 0, 0, ZoneOffset.UTC));
         domain.setUpdatedAt(OffsetDateTime.of(2024, 10, 11, 14, 30, 0, 0, ZoneOffset.UTC));
         return domain;
+    }
+
+    public static UserFilter getUserFilter() {
+        return new UserFilter("marcos.silva", "marcos.silva@email.com", "marcos.silva", true);
     }
 }
