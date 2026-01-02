@@ -1,13 +1,14 @@
 package com.br.fiap.infraestrutura.database.repositories;
 
-import com.br.fiap.infraestrutura.database.entities.UserDocument;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import com.br.fiap.infraestrutura.database.entities.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.Optional;
 
-public interface UserRepository extends MongoRepository<UserDocument, String> {
+public interface UserRepository extends JpaRepository<UserEntity, Long>, JpaSpecificationExecutor<UserEntity> {
 
-    Optional<UserDocument> findByEmailOrUsername(String email, String usuario);
+    Optional<UserEntity> findByEmailOrUsername(String email, String username);
 
-    Optional<UserDocument> findByUsername(String usuario);
+    Optional<UserEntity> findByUsername(String username);
 }

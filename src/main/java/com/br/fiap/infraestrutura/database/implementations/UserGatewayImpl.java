@@ -3,19 +3,18 @@ package com.br.fiap.infraestrutura.database.implementations;
 import com.br.fiap.application.dto.UserFilter;
 import com.br.fiap.application.gateways.UserGateway;
 import com.br.fiap.domain.model.UserDomain;
-import com.br.fiap.infraestrutura.database.entities.UserDocument;
-import com.br.fiap.infraestrutura.database.mapper.UserDocumentMapper;
+import com.br.fiap.infraestrutura.database.entities.UserEntity;
+import com.br.fiap.infraestrutura.database.mapper.UserEntityMapper;
 import com.br.fiap.infraestrutura.database.repositories.UserRepository;
+import jakarta.persistence.criteria.Predicate;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,75 +24,93 @@ import java.util.stream.Collectors;
 public class UserGatewayImpl implements UserGateway {
 
     private final UserRepository userRepository;
-    private final MongoTemplate mongoTemplate;
-    private final UserDocumentMapper userDocumentMapper;
+    private final UserEntityMapper userEntityMapper;
 
     @Override
     public Optional<UserDomain> getById(String id) {
-        return userRepository.findById(id)
-                .map(UserDocumentMapper.INSTANCE::toDomain);
+        try {
+            Long userId = Long.parseLong(id);
+            return userRepository.findById(userId)
+                    .map(userEntityMapper::toDomain);
+        } catch (NumberFormatException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
     public Optional<UserDomain> getByUsername(String username) {
         return userRepository.findByUsername(username)
-                .map(UserDocumentMapper.INSTANCE::toDomain);
+                .map(userEntityMapper::toDomain);
     }
 
     @Override
     public void save(UserDomain domain) {
-        UserDocument userDocument = UserDocumentMapper.INSTANCE.toDocument(domain);
-        userRepository.save(userDocument);
+        UserEntity userEntity = userEntityMapper.toEntity(domain);
+        userRepository.save(userEntity);
+        // Update domain with generated ID
+        if (userEntity.getId() != null) {
+            domain.setId(userEntity.getId().toString());
+        }
     }
 
     @Override
     public void delete(UserDomain domain) {
-        UserDocument userDocument = UserDocumentMapper.INSTANCE.toDocument(domain);
-        userRepository.delete(userDocument);
+        try {
+            Long userId = Long.parseLong(domain.getId());
+            userRepository.deleteById(userId);
+        } catch (NumberFormatException e) {
+            // If ID is not a valid Long, try to find by username
+            userRepository.findByUsername(domain.getUsername())
+                    .ifPresent(userRepository::delete);
+        }
     }
 
     @Override
     public Optional<UserDomain> checkExistenceByEmailOrUser(String email, String username) {
         return userRepository.findByEmailOrUsername(email, username)
-                .map(UserDocumentMapper.INSTANCE::toDomain);
+                .map(userEntityMapper::toDomain);
     }
 
     @Override
     public Page<UserDomain> findWithFilter(UserFilter filter, Pageable pageable) {
+        Specification<UserEntity> spec = buildSpecification(filter);
+        Page<UserEntity> userEntities = userRepository.findAll(spec, pageable);
 
-        Query query = buildQuery(filter);
-        long total = mongoTemplate.count(query, UserDocument.class);
-        query.with(pageable);
-
-        List<UserDomain> userDomains = mongoTemplate.find(query, UserDocument.class)
-                .stream()
-                .map(UserDocumentMapper.INSTANCE::toDomain)
+        List<UserDomain> userDomains = userEntities.getContent().stream()
+                .map(userEntityMapper::toDomain)
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(userDomains, pageable, total);
+        return new PageImpl<>(userDomains, pageable, userEntities.getTotalElements());
     }
 
-    private Query buildQuery(UserFilter filter) {
-        Query query = new Query();
+    private Specification<UserEntity> buildSpecification(UserFilter filter) {
+        return (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
 
-        // Filter by name
-        if (filter.name() != null && !filter.name().isBlank()) {
-            query.addCriteria(Criteria.where("name").regex(filter.name().trim(), "i"));
-        }
+            // Filter by name (case-insensitive LIKE)
+            if (filter.name() != null && !filter.name().isBlank()) {
+                predicates.add(cb.like(
+                    cb.lower(root.get("name")),
+                    "%" + filter.name().trim().toLowerCase() + "%"
+                ));
+            }
 
-        // Filter by email
-        if (filter.email() != null && !filter.email().isBlank()) {
-            query.addCriteria(Criteria.where("email").is(filter.email().trim()));
-        }
+            // Filter by email (exact match)
+            if (filter.email() != null && !filter.email().isBlank()) {
+                predicates.add(cb.equal(root.get("email"), filter.email().trim()));
+            }
 
-        // Filter by username
-        if (filter.username() != null && !filter.username().isBlank()) {
-            query.addCriteria(Criteria.where("username").is(filter.username().trim()));
-        }
+            // Filter by username (exact match)
+            if (filter.username() != null && !filter.username().isBlank()) {
+                predicates.add(cb.equal(root.get("username"), filter.username().trim()));
+            }
 
-        if (filter.activeUser() != null) {
-            query.addCriteria(Criteria.where("activeUser").is(filter.activeUser().booleanValue()));
-        }
-        return query;
+            // Filter by activeUser
+            if (filter.activeUser() != null) {
+                predicates.add(cb.equal(root.get("activeUser"), filter.activeUser()));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
     }
 }
