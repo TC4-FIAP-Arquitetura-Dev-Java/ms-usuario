@@ -1,10 +1,12 @@
 package com.br.fiap.entrypoinsts.controllers;
 
-import com.br.fiap.application.usecase.UpdateUserUseCase;
-import com.br.fiap.application.usecase.ListUsersUseCase;
-import com.br.fiap.application.usecase.GetUserByIdUseCase;
 import com.br.fiap.application.usecase.CreateUserUseCase;
 import com.br.fiap.application.usecase.DeleteUserUseCase;
+import com.br.fiap.application.usecase.GetByUsernameUseCase;
+import com.br.fiap.application.usecase.GetUserByIdUseCase;
+import com.br.fiap.application.usecase.ListUsersUseCase;
+import com.br.fiap.application.usecase.UpdateUserUseCase;
+import com.br.fiap.domain.model.UserDomain;
 import com.br.fiap.entrypoinsts.controllers.mappers.UserDtoMapper;
 import com.fiap.ms.userDomain.gen.model.UserRequestDto;
 import com.fiap.ms.userDomain.gen.model.UserResponseDto;
@@ -18,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 
 import static com.br.fiap.util.mocks.UsuarioRequestDtoMock.getUserRequestDto;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
@@ -48,6 +51,9 @@ class UserControllerTest {
 
     @Mock
     private UserDtoMapper userDtoMapper;
+
+    @Mock
+    private GetByUsernameUseCase getByUsernameUseCase;
 
     @Test
     void atualizarUsuario_sucesso() {
@@ -89,5 +95,25 @@ class UserControllerTest {
 
         assertEquals(HttpStatus.NO_CONTENT, result.getStatusCode());
         verify(deleteUserUseCase, times(1)).delete(id);
+    }
+
+    @Test
+    void _getUserByUsername_shouldReturnUserResponse() {
+        UserDomain userDomain = new UserDomain();
+        userDomain.setId("1");
+        UserResponseDto responseDto = new UserResponseDto();
+        responseDto.setId("1");
+
+        when(getByUsernameUseCase.getByUsername("john")).thenReturn(userDomain);
+        when(userDtoMapper.toUserResponseDto(userDomain)).thenReturn(responseDto);
+
+        ResponseEntity<UserResponseDto> response = userController._getUserByUsername("john");
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("1", response.getBody().getId());
+
+        verify(getByUsernameUseCase).getByUsername("john");
+        verify(userDtoMapper).toUserResponseDto(userDomain);
     }
 }

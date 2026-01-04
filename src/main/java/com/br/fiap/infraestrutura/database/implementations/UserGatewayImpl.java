@@ -47,7 +47,6 @@ public class UserGatewayImpl implements UserGateway {
     public void save(UserDomain domain) {
         UserEntity userEntity = userEntityMapper.toEntity(domain);
         userRepository.save(userEntity);
-        // Update domain with generated ID
         if (userEntity.getId() != null) {
             domain.setId(userEntity.getId().toString());
         }
@@ -59,7 +58,6 @@ public class UserGatewayImpl implements UserGateway {
             Long userId = Long.parseLong(domain.getId());
             userRepository.deleteById(userId);
         } catch (NumberFormatException e) {
-            // If ID is not a valid Long, try to find by username
             userRepository.findByUsername(domain.getUsername())
                     .ifPresent(userRepository::delete);
         }
@@ -87,7 +85,6 @@ public class UserGatewayImpl implements UserGateway {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            // Filter by name (case-insensitive LIKE)
             if (filter.name() != null && !filter.name().isBlank()) {
                 predicates.add(cb.like(
                     cb.lower(root.get("name")),
@@ -95,17 +92,14 @@ public class UserGatewayImpl implements UserGateway {
                 ));
             }
 
-            // Filter by email (exact match)
             if (filter.email() != null && !filter.email().isBlank()) {
                 predicates.add(cb.equal(root.get("email"), filter.email().trim()));
             }
 
-            // Filter by username (exact match)
             if (filter.username() != null && !filter.username().isBlank()) {
                 predicates.add(cb.equal(root.get("username"), filter.username().trim()));
             }
 
-            // Filter by activeUser
             if (filter.activeUser() != null) {
                 predicates.add(cb.equal(root.get("activeUser"), filter.activeUser()));
             }

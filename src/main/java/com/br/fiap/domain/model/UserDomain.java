@@ -29,7 +29,6 @@ public class UserDomain {
         this.updatedAt = updatedAt;
     }
 
-    // GETTERS AND SETTERS
     public String getId() {
         return id;
     }

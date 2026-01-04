@@ -10,8 +10,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.ERROR)
 public interface UserEntityMapper {
 
-    UserEntityMapper INSTANCE = Mappers.getMapper(UserEntityMapper.class);
-
     @Mapping(target = "createdAt", expression = "java(userEntity.getCreatedAt() != null ? userEntity.getCreatedAt().atOffset(java.time.ZoneOffset.UTC) : null)")
     @Mapping(target = "updatedAt", expression = "java(userEntity.getUpdatedAt() != null ? userEntity.getUpdatedAt().atOffset(java.time.ZoneOffset.UTC) : null)")
     @Mapping(target = "id", expression = "java(userEntity.getId() != null ? userEntity.getId().toString() : null)")
