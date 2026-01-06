@@ -10,9 +10,9 @@
 	</parent>
 
 	<groupId>com.br.fiap</groupId>
-	<artifactId>ms-userGateway</artifactId>
+	<artifactId>ms-usuario</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
-	<name>ms-userGateway</name>
+	<name>ms-usuario</name>
 	<description>Projeto para gerenciamento de ações do usuário</description>
 
 	<properties>
