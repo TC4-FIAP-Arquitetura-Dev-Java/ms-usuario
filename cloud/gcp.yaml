@@ -1,0 +1,111 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: ms-usuario
+  namespace: '780675609467'
+  selfLink: /apis/serving.knative.dev/v1/namespaces/780675609467/services/ms-usuario
+  uid: 9c14c23a-3b3e-4373-8de6-b6eadd971cc8
+  resourceVersion: AAZHwXahnlM
+  generation: 35
+  creationTimestamp: '2026-01-02T17:27:10.966474Z'
+  labels:
+    commit-sha: 0ccec56dd8d30bd5a9b3909cee922debd3cf65a4
+    gcb-build-id: f94475d8-017f-4a35-a3b7-aaa09ef6f53f
+    gcb-trigger-id: 2d91e8d5-1b30-4ff8-ab83-f96b84541266
+    gcb-trigger-region: global
+    managed-by: gcp-cloud-build-deploy-cloud-run
+    cloud.googleapis.com/location: us-central1
+  annotations:
+    serving.knative.dev/creator: dpcamargo@gmail.com
+    serving.knative.dev/lastModifier: 780675609467-compute@developer.gserviceaccount.com
+    run.googleapis.com/client-name: gcloud
+    run.googleapis.com/client-version: 551.0.0
+    run.googleapis.com/operation-id: c6577427-773b-4ba4-beae-4653724dd996
+    run.googleapis.com/ingress: all
+    run.googleapis.com/ingress-status: all
+    run.googleapis.com/invoker-iam-disabled: 'true'
+    run.googleapis.com/maxScale: '1'
+    run.googleapis.com/urls: '["https://ms-usuario-780675609467.us-central1.run.app","https://ms-usuario-p72ngdpwvq-uc.a.run.app"]'
+spec:
+  template:
+    metadata:
+      labels:
+        client.knative.dev/nonce: obytdjljde
+        commit-sha: 0ccec56dd8d30bd5a9b3909cee922debd3cf65a4
+        gcb-build-id: f94475d8-017f-4a35-a3b7-aaa09ef6f53f
+        gcb-trigger-id: 2d91e8d5-1b30-4ff8-ab83-f96b84541266
+        gcb-trigger-region: global
+        managed-by: gcp-cloud-build-deploy-cloud-run
+        run.googleapis.com/startupProbeType: Default
+      annotations:
+        autoscaling.knative.dev/maxScale: '1'
+        run.googleapis.com/client-name: gcloud
+        run.googleapis.com/client-version: 551.0.0
+        run.googleapis.com/cloudsql-instances: fiap-474820:us-central1:sql-ms-usuario
+        run.googleapis.com/execution-environment: gen2
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      serviceAccountName: sa-ms-usuario@fiap-474820.iam.gserviceaccount.com
+      containers:
+        - name: placeholder-1
+          image: us-central1-docker.pkg.dev/fiap-474820/cloud-run-source-deploy/ms-usuario/ms-usuario:0ccec56dd8d30bd5a9b3909cee922debd3cf65a4
+          ports:
+            - name: http1
+              containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql:///ms_usuario?cloudSqlInstance=fiap-474820:us-central1:sql-ms-usuario&socketFactory=com.google.cloud.sql.mysql.SocketFactory&useSSL=false
+            - name: SPRING_DATASOURCE_USERNAME
+              value: appuser
+            - name: REDEPLOY
+              value: '2'
+            - name: SPRING_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: ms-usuario-db-password
+            - name: JWT_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: JWT_ACCESS_TOKEN
+            - name: JWT_REFRESH_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: latest
+                  name: JWT_REFRESH_TOKEN
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+          startupProbe:
+            timeoutSeconds: 240
+            periodSeconds: 240
+            failureThreshold: 1
+            tcpSocket:
+              port: 8080
+  traffic:
+    - percent: 100
+      latestRevision: true
+status:
+  observedGeneration: 35
+  conditions:
+    - type: Ready
+      status: 'True'
+      lastTransitionTime: '2026-01-07T00:35:04.827475Z'
+    - type: ConfigurationsReady
+      status: 'True'
+      lastTransitionTime: '2026-01-07T00:34:29.631754Z'
+    - type: RoutesReady
+      status: 'True'
+      lastTransitionTime: '2026-01-07T00:35:04.780686Z'
+  latestReadyRevisionName: ms-usuario-00033-2vc
+  latestCreatedRevisionName: ms-usuario-00033-2vc
+  traffic:
+    - revisionName: ms-usuario-00033-2vc
+      percent: 100
+      latestRevision: true
+  url: https://ms-usuario-p72ngdpwvq-uc.a.run.app
+  address:
+    url: https://ms-usuario-p72ngdpwvq-uc.a.run.app
